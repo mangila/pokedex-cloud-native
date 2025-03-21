@@ -1,7 +1,7 @@
 locals {
   common_tags = {
     Application = "pokedex-cloud-native"
-    Environment = var.environment
+    Environment = var.application_environment
     Owner       = "mangila"
   }
 }

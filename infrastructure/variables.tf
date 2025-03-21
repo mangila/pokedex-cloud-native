@@ -13,13 +13,11 @@ variable "aws_secret_key" {
 variable "aws_region" {
   type        = string
   description = "AWS region where resources will be created"
-  default     = "eu-north-1"
   sensitive   = false
 }
 
-variable "environment" {
+variable "application_environment" {
   type        = string
-  description = "Environment for the infrastructure"
-  default     = "development"
+  description = "Application environment for the infrastructure (dev, test, prod, etc..)"
   sensitive   = false
 }
