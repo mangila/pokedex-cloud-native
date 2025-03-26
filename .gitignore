@@ -1,2 +1,5 @@
 .idea
+*.zip
+*.bin
 secret.tfvars.tf
+go.work
