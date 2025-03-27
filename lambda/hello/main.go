@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
-	"shared/models"
 )
 
 // Handler function
-func Handler(ctx context.Context, event models.Greeting) (string, error) {
+func Handler(ctx context.Context, event json.RawMessage) (string, error) {
 	fmt.Println("Received event:", event)
 	return "Hello from Go Lambda!", nil
 }

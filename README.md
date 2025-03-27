@@ -15,14 +15,18 @@ aws_secret_key = ""
 
 ## lambda
 
-golang lambdas source code
+lambdas source code - golang workspace project
+
+`go work init <module1> <module2>`
 
 - hello - placeholder (WIP)
-- world - placeholder (WIP)
 
-## scripts
+- shared - structs, utils etc.
 
-python scripts automation
+## deploy.py
 
-- build and .zip compress golang lambdas
-- run terraform commands
+run terraform commands and create resources
+
+## package.py
+
+build binaries and .zip golang source code
