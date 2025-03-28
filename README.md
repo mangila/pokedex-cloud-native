@@ -6,7 +6,9 @@
 
 * AWS provider
 
-create `secret.tfvars.tf` file in `/infrastructure` to set aws secrets
+create secrets file with AWS for secret key authentication.
+
+`./infrastructure/vars/secret.tfvars.tf`
 
 ```terraform
 aws_access_key = ""
@@ -27,6 +29,14 @@ lambdas source code - golang workspace project
 
 run terraform commands and create resources
 
+- fmt -check
+- plan
+- apply
+
 ## package.py
 
 build binaries and .zip golang source code
+
+## destroy.py
+
+run terraform destroy command

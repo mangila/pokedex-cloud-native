@@ -18,8 +18,8 @@ resource "aws_subnet" "pokedex_public_subnet" {
 }
 
 resource "aws_security_group" "public_sg" {
-  description = "Public security group that allows all traffic"
-  depends_on = [aws_vpc.pokedex_vpc]
+  description = "Public security group"
+  depends_on  = [aws_vpc.pokedex_vpc]
   vpc_id      = aws_vpc.pokedex_vpc.id
 }
 
@@ -43,12 +43,12 @@ resource "aws_vpc_security_group_egress_rule" "public_https_egress" {
 
 resource "aws_subnet" "pokedex_private_subnet" {
   vpc_id     = aws_vpc.pokedex_vpc.id
-  cidr_block = "10.0.1.128/24"
+  cidr_block = "10.0.2.0/24"
 }
 
 resource "aws_security_group" "private_sg" {
-  description = "Private security group only for the VPC"
-  depends_on = [aws_vpc.pokedex_vpc]
+  description = "Private security group"
+  depends_on  = [aws_vpc.pokedex_vpc]
   vpc_id      = aws_vpc.pokedex_vpc.id
 }
 
@@ -58,6 +58,7 @@ resource "aws_vpc_security_group_ingress_rule" "private_any_ingress" {
   ip_protocol       = -1
   from_port         = 0
   to_port           = 0
+  cidr_ipv4         = aws_subnet.pokedex_private_subnet.cidr_block
 }
 
 resource "aws_vpc_security_group_egress_rule" "private_any_egress" {
@@ -66,4 +67,5 @@ resource "aws_vpc_security_group_egress_rule" "private_any_egress" {
   ip_protocol       = -1
   from_port         = 0
   to_port           = 0
+  cidr_ipv4         = aws_subnet.pokedex_private_subnet.cidr_block
 }

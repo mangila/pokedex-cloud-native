@@ -3,3 +3,7 @@
 *.bin
 secret.tfvars.tf
 go.work
+.terraform.lock.hcl
+.terraform
+terraform.tfstate
+terraform.tfstate.backup
