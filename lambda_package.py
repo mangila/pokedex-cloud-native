@@ -33,7 +33,8 @@ def build_go_binaries(lambda_name, output_dir):
         env["GOARCH"] = "arm64"
         env["CGO_ENABLED "] = "0"
         go_binary = os.path.join(output_dir, lambda_name) + ".bin"
-        subprocess.run(["go", "build", "-o", go_binary],
+        go_build_command = "go build -o {} main.go".format(go_binary)
+        subprocess.run(go_build_command,
                        env=env,
                        check=True)
         print(f"Built golang binary: {go_binary}")

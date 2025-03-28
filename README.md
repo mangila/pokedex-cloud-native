@@ -25,18 +25,18 @@ lambdas source code - golang workspace project
 
 - shared - structs, utils etc.
 
-## deploy.py
+## lambda_package.py
 
-run terraform commands and create resources
+build binaries and .zip golang source code for aws lambda deployment
 
-- fmt -check
-- plan
-- apply
+## terraform_apply.py
 
-## package.py
+run terraform `apply` command with vars
 
-build binaries and .zip golang source code
+## terraform_destroy.py
 
-## destroy.py
+run terraform `destroy` command with vars
 
-run terraform destroy command
+## terraform_format_plan.py
+
+run terraform `fmt` and `plan` command with vars
