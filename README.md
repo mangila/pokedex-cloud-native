@@ -25,7 +25,7 @@ lambdas source code - golang workspace project
 
 - shared - structs, utils etc.
 
-## lambda_package.py
+## package_lambda.py
 
 build binaries and .zip golang source code for aws lambda deployment
 
