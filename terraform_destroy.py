@@ -4,6 +4,9 @@ import sys
 
 
 def main():
+    """
+    run terraform `destroy` command with vars
+    """
     os.chdir("infrastructure")
     tf_vars = {
         "env": "vars/dev.tfvars.tf",

@@ -5,16 +5,14 @@ import zipfile
 
 
 def main():
-    # Change working dir to lambda
+    """
+    build binaries and .zip golang source code for aws lambda deployment
+    """
     os.chdir("lambda")
-    # Define the Lambda details
     lambdas = [
         {"name": "hello"},
     ]
-    # target folder for binaries and .zip
     output_dir = "../build"
-
-    # Build and zip each Lambda function
     for lambda_info in lambdas:
         lambda_name = lambda_info["name"]
         go_binary = build_go_binaries(lambda_name=lambda_name,

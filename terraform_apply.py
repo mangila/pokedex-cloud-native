@@ -3,6 +3,18 @@ import subprocess
 import sys
 
 
+def main():
+    """
+    run terraform `apply` command with vars
+    """
+    os.chdir("infrastructure")
+    tf_vars = {
+        "env": "vars/dev.tfvars.tf",
+        "secret": "vars/secret.tfvars.tf",
+    }
+    terraform_apply(tf_vars)
+
+
 def terraform_apply(tf_vars: dict[str, str]):
     env = tf_vars["env"]
     secret = tf_vars["secret"]
@@ -12,15 +24,6 @@ def terraform_apply(tf_vars: dict[str, str]):
     out = subprocess.run(tf_command)
     if out.returncode != 0:
         sys.exit(out.returncode)
-
-
-def main():
-    os.chdir("infrastructure")
-    tf_vars = {
-        "env": "vars/dev.tfvars.tf",
-        "secret": "vars/secret.tfvars.tf",
-    }
-    terraform_apply(tf_vars)
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ import sys
 
 
 def main():
+    """run terraform `fmt` and `plan` command with vars"""
     os.chdir("infrastructure")
     tf_vars = {
         "env": "vars/dev.tfvars.tf",
