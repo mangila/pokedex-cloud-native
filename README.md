@@ -8,14 +8,14 @@
 
 create secrets file with AWS for secret key authentication.
 
-`./infrastructure/vars/secret.tfvars.tf`
+`infrastructure/vars/secret.tfvars.tf`
 
 ```terraform
 aws_access_key = ""
 aws_secret_key = ""
 ```
 
-## infrastructure/src
+## infrastructure/lambda_src
 
 lambdas source code - golang workspace project
 
@@ -29,14 +29,20 @@ lambdas source code - golang workspace project
 
 build golang binaries for aws lambda deployment
 
+- `go build -o bootstrap main.go`
+
 ## terraform_apply.py
 
-run terraform `apply` command with vars
+run `terraform apply -auto-approve` with vars
 
 ## terraform_destroy.py
 
-run terraform `destroy` command with vars
+run `terraform destroy -auto-approve` with vars
 
-## terraform_format_plan.py
+## terraform_format.py
 
-run terraform `fmt` and `plan` command with vars
+run `terraform fmt -check` with vars
+
+## terraform_plan.py
+
+run `terraform plan`
