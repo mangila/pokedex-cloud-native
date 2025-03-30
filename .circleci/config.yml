@@ -12,7 +12,7 @@ jobs:
       - checkout
       - run:
           name: Execute Python Script
-          command: terraform fmt
+          command: python terraform_format.py
 
 workflows:
   main:
