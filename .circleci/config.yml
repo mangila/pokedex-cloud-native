@@ -12,6 +12,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: terraform init
+          command: terraform init
+      - run:
           name: Execute Python Script
           command: python terraform_format.py
 
