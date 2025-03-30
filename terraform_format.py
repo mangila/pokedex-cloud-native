@@ -5,7 +5,7 @@ def terraform_format():
     tf_command = "terraform fmt -check"
     print(tf_command)
     subprocess.run(tf_command,
-                   cwd="infrastructure",
+                   cwd="project",
                    check=True,
                    shell=True)
 

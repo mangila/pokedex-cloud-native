@@ -8,7 +8,7 @@ repos:
         language: system
         verbose: true
         require_serial: true
-        files: "^infrastructure/lambda_src"
+        files: "^project/lambda_src"
         stages:
           - pre-commit
       - id: terraform_format
@@ -17,7 +17,7 @@ repos:
         language: system
         verbose: true
         require_serial: true
-        files: "^infrastructure"
+        files: "^project"
         stages:
           - pre-commit
       - id: terraform_plan
@@ -26,6 +26,6 @@ repos:
         language: system
         verbose: true
         require_serial: true
-        files: "^infrastructure"
+        files: "^project"
         stages:
           - pre-commit

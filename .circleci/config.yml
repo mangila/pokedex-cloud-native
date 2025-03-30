@@ -30,12 +30,10 @@ jobs:
       - run:
           name: python compile_lambda.py
           command: python compile_lambda.py
+      # TODO cache tf state
       - run:
           name: python terraform_init.py
           command: python terraform_init.py
-      - run:
-          name: python terraform_format.py
-          command: python terraform_format.py
 
 workflows:
   main:
