@@ -8,7 +8,7 @@ jobs:
   publish:
     executor: python/default
     docker:
-      - terraform/default
+      - hashicorp/terraform:light
     steps:
       - checkout
       - run: python terraform_format.py
