@@ -13,6 +13,6 @@ resource "aws_lambda_function" "example_lambda" {
 }
 
 output "example_lambda_name" {
-  value       = aws_lambda_function.example_lambda.function_name
   description = "Lambda function name"
+  value       = aws_lambda_function.example_lambda.function_name
 }
