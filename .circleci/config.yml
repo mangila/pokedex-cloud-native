@@ -11,11 +11,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: go
-          command: sudo apt update -y && sudo apt install golang -y
+          name: update machine
+          command: sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y
       - run:
-          name: asdf
-          command: go env
+          name: install golang
+          command: wget https://go.dev/dl/go1.24.1.linux-amd64.tar.gz && tar -C /home/circleci -xzf go1.24.1.linux-amd64.tar.gz && ls -a
       - run:
           name: verify terraform
           command: terraform version
