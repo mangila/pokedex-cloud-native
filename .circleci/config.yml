@@ -13,8 +13,14 @@ jobs:
     steps:
       - checkout
       - run:
+          name: terraform
+          command: terraform version
+      - run:
+          name: python
+          command: python --version
+      - run:
           name: go
-          command: go -version
+          command: go version
       - run:
           name: python compile_lambda.py
           command: python compile_lambda.py
