@@ -3,8 +3,8 @@ version: 2.1
 executors:
   python-terraform-executor:
     docker:
-      - image: cimg/deploy:2025.01
       - image: cimg/go:1.24.1
+      - image: cimg/deploy:2025.01
       - image: cimg/python:3.13.2
 
 jobs:
