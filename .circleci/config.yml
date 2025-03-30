@@ -7,6 +7,8 @@ orbs:
 jobs:
   publish:
     executor: python/default
+    docker:
+      - terraform/default
     steps:
       - checkout
       - run: python terraform_format.py
