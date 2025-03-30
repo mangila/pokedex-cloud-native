@@ -26,5 +26,6 @@ def terraform_apply(tf_vars: dict[str, str]):
         sys.exit(out.returncode)
 
 
+
 if __name__ == "__main__":
     main()
