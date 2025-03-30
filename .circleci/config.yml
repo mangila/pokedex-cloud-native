@@ -6,7 +6,7 @@ executors:
       - image: cimg/deploy:2025.01
 jobs:
   publish:
-    executor: python-terraform-executor
+    executor: deploy-executor
     steps:
       - checkout
       - run:
