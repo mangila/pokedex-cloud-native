@@ -17,6 +17,7 @@ repos:
         language: system
         verbose: true
         require_serial: true
+        files: "^infrastructure"
         stages:
           - pre-commit
       - id: terraform_plan
@@ -25,5 +26,6 @@ repos:
         language: system
         verbose: true
         require_serial: true
+        files: "^infrastructure"
         stages:
           - pre-commit
