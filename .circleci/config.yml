@@ -13,9 +13,9 @@ jobs:
       - checkout
       - run:
           name: terraform init
-          command: terraform init
+          command: python terraform_init.py
       - run:
-          name: Execute Python Script
+          name: terraform format
           command: python terraform_format.py
 
 workflows:
