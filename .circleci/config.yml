@@ -12,7 +12,7 @@ jobs:
       - checkout
       - run:
           name: Execute Python Script
-          command: python terraform_format.py
+          command: terraform plan -auto-approve
 
 workflows:
   main:
