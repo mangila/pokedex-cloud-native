@@ -11,17 +11,20 @@ jobs:
     steps:
       - checkout
       - run:
-          name: asdf
-          command: sudo apt update -y && sudo apt install golang -y
+          name: install golang 1.24.1
+          command: wget https://go.dev/dl/go1.24.1.linux-amd64.tar.gz
       - run:
-          name: terraform
+          name: extract golang tarball and set PATH
+          command: sudo tar -C /usr/local -xzf go1.24.1.linux-amd64.tar.gz && export PATH=$PATH:/usr/local/go/bin
+      - run:
+          name: verify go
+          command: go version
+      - run:
+          name: verify terraform
           command: terraform version
       - run:
-          name: python
+          name: verify python
           command: python --version
-      - run:
-          name: go
-          command: go version
       - run:
           name: python compile_lambda.py
           command: python compile_lambda.py
