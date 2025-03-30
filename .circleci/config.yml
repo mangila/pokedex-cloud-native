@@ -13,6 +13,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: asdf
+          command: echo $PATH
+      - run:
           name: terraform
           command: terraform version
       - run:
