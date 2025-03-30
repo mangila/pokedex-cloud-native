@@ -14,7 +14,10 @@ jobs:
           command: sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y
       - run:
           name: install golang
-          command: wget https://go.dev/dl/go1.24.1.linux-amd64.tar.gz && tar -C . -xzf go1.24.1.linux-amd64.tar.gz && export PATH=$PATH:/home/circleci/project/go/bin
+          command: |
+            wget https://go.dev/dl/go1.24.1.linux-amd64.tar.gz
+            sudo tar -C /usr/local -xzf go1.24.1.linux-amd64.tar.gz
+            echo 'export PATH=$PATH:/usr/local/go/bin' >> $BASH_ENV
       - run:
           name: verify terraform
           command: terraform version
