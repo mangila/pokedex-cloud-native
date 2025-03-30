@@ -14,7 +14,7 @@ jobs:
       - checkout
       - run:
           name: asdf
-          command: echo $PATH
+          command: which go
       - run:
           name: terraform
           command: terraform version
