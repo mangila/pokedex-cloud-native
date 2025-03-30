@@ -1,6 +1,7 @@
 .idea
 *.zip
 *.bin
+bootstrap
 secret.tfvars.tf
 go.work
 .terraform.lock.hcl

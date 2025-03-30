@@ -15,7 +15,7 @@ aws_access_key = ""
 aws_secret_key = ""
 ```
 
-## lambda
+## infrastructure/src
 
 lambdas source code - golang workspace project
 
@@ -25,9 +25,9 @@ lambdas source code - golang workspace project
 
 - shared - structs, utils etc.
 
-## package_lambda.py
+## compile_lambda.py
 
-build binaries and .zip golang source code for aws lambda deployment
+build golang binaries for aws lambda deployment
 
 ## terraform_apply.py
 

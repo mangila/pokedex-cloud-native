@@ -1,0 +1,44 @@
+fail_fast: true
+repos:
+  - repo: local
+    hooks:
+      - id: terraform_destroy
+        name: Run terraform destroy
+        entry: python terraform_destroy.py
+        language: system
+        verbose: true
+        require_serial: true
+        stages:
+          - pre-commit
+      - id: compile_lambda
+        name: compile lambda go code
+        entry: python compile_lambda.py
+        language: system
+        verbose: true
+        require_serial: true
+        stages:
+          - pre-commit
+      - id: terraform_format
+        name: Run terraform fmt
+        entry: python terraform_format.py
+        language: system
+        verbose: true
+        require_serial: true
+        stages:
+          - pre-commit
+      - id: terraform_plan
+        name: Run terraform plan
+        entry: python terraform_plan.py
+        language: system
+        verbose: true
+        require_serial: true
+        stages:
+          - pre-commit
+      - id: terraform_apply
+        name: Run terraform plan
+        entry: python terraform_apply.py
+        language: system
+        verbose: true
+        require_serial: true
+        stages:
+          - pre-push
