@@ -29,3 +29,21 @@ repos:
         files: "^infrastructure"
         stages:
           - pre-commit
+      - id: terraform_destroy
+        name: Run terraform destroy
+        entry: python terraform_destroy.py
+        language: system
+        verbose: true
+        require_serial: true
+        files: "^infrastructure"
+        stages:
+          - pre-push
+      - id: terraform_apply
+        name: Run terraform apply
+        entry: python terraform_apply.py
+        language: system
+        verbose: true
+        require_serial: true
+        files: "^infrastructure"
+        stages:
+          - pre-push

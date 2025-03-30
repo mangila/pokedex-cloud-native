@@ -18,7 +18,7 @@ def main():
 def terraform_apply(tf_vars: dict[str, str]):
     env = tf_vars["env"]
     secret = tf_vars["secret"]
-    tf_command = ("terraform apply -var-file={} -var-file={}"
+    tf_command = ("terraform apply -var-file={} -var-file={} -auto-approve"
                   .format(env, secret))
     print(tf_command)
     out = subprocess.run(tf_command)
