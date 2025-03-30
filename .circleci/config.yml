@@ -1,7 +1,7 @@
 version: 2.1
 
 executors:
-  python-terraform-executor:
+  deploy-executor:
     docker:
       - image: cimg/deploy:2025.01
 jobs:
