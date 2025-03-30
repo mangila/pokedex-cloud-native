@@ -16,8 +16,8 @@ output "pokedex_lambda_bucket" {
 
 data "archive_file" "hello_zip" {
   type        = "zip"
-  source_dir  = "src/hello"
-  output_path = "src/hello/bootstrap.zip"
+  source_dir  = "lambda_src/hello"
+  output_path = "lambda_src/hello/bootstrap.zip"
 }
 
 resource "aws_s3_object" "hello_s3_object" {

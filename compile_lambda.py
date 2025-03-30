@@ -10,7 +10,7 @@ def main():
     lambdas = [
         {"name": "hello"},
     ]
-    os.chdir("infrastructure/src")
+    os.chdir("infrastructure/lambda_src")
     for lambda_info in lambdas:
         lambda_name = lambda_info["name"]
         os.chdir(lambda_name)
@@ -28,9 +28,9 @@ def build_go_binaries(lambda_name):
         subprocess.run(go_build_command,
                        env=env,
                        check=True)
-        print(f"Built golang binary for src -- {lambda_name}")
+        print(f"Built golang binary for lambda_src -- {lambda_name}")
     except Exception as e:
-        print(f"Error while building golang binary for src -- {lambda_name}: {e}")
+        print(f"Error while building golang binary for lambda_src -- {lambda_name}: {e}")
         sys.exit(1)
 
 
