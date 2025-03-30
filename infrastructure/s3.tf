@@ -1,7 +1,7 @@
 resource "random_string" "bucket_name_generator" {
   length  = 8
-  special = false # Exclude special characters
-  upper   = false # Include uppercase letters
+  special = false
+  upper   = false
   numeric = true
 }
 

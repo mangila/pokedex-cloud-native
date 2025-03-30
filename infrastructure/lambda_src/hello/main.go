@@ -10,7 +10,7 @@ import (
 // Handler function
 func Handler(ctx context.Context, event json.RawMessage) (string, error) {
 	fmt.Println("Received event:", event)
-	return "Hello from Go Lambda -- ASDF!!!", nil
+	return "Hello World!", nil
 }
 
 func main() {
