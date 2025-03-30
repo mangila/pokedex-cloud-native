@@ -11,6 +11,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: asdf
+          command: echo $PATH
+      - run:
           name: install golang 1.24.1
           command: wget https://go.dev/dl/go1.24.1.linux-amd64.tar.gz && sudo tar -C /usr/local -xzf go1.24.1.linux-amd64.tar.gz && echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.profile
       - run:
