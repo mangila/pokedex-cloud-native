@@ -5,6 +5,7 @@ executors:
     docker:
       - image: cimg/deploy:2025.01
       - image: cimg/python:3.13.2
+      - image: cimg/go:1.24
 
 jobs:
   publish:
@@ -12,10 +13,13 @@ jobs:
     steps:
       - checkout
       - run:
-          name: terraform init
+          name: python compile_lambda.py
+          command: python compile_lambda.py
+      - run:
+          name: python terraform_init.py
           command: python terraform_init.py
       - run:
-          name: terraform format
+          name: python terraform_format.py
           command: python terraform_format.py
 
 workflows:

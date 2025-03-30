@@ -4,18 +4,12 @@ import sys
 
 
 def main():
-    """
-    build golang binaries for aws lambda deployment
-    """
     lambdas = [
         {"name": "hello"},
     ]
-    os.chdir("infrastructure/lambda_src")
     for lambda_info in lambdas:
         lambda_name = lambda_info["name"]
-        os.chdir(lambda_name)
         build_go_binaries(lambda_name=lambda_name)
-        os.chdir("..")
 
 
 def build_go_binaries(lambda_name):
@@ -25,9 +19,12 @@ def build_go_binaries(lambda_name):
         env["GOARCH"] = "amd64"
         env["CGO_ENABLED "] = "0"
         go_build_command = "go build -o bootstrap main.go"
+        cwd = f"infrastructure/lambda_src/{lambda_name}"
         subprocess.run(go_build_command,
+                       cwd=cwd,
                        env=env,
-                       check=True)
+                       check=True,
+                       shell=True)
         print(f"Built golang binary for lambda_src -- {lambda_name}")
     except Exception as e:
         print(f"Error while building golang binary for lambda_src -- {lambda_name}: {e}")

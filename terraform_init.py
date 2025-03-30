@@ -1,21 +1,14 @@
-import os
 import subprocess
-import sys
 
 
-def main():
-    """run terraform `init`"""
-    os.chdir("infrastructure")
-    terraform_format()
-
-
-def terraform_format():
+def terraform_init():
     tf_command = "terraform init"
     print(tf_command)
-    out = subprocess.run(tf_command, check=True, shell=True)
-    if out.returncode != 0:
-        sys.exit(out.returncode)
+    subprocess.run(tf_command,
+                   cwd="infrastructure",
+                   check=True,
+                   shell=True)
 
 
 if __name__ == "__main__":
-    main()
+    terraform_init()

@@ -1,25 +1,16 @@
-import os
 import subprocess
-import sys
+
+from terraform_vars import ENV_TF_VARS_FILE, SECRET_TF_VARS_FILE
 
 
-def main():
-    """run terraform `plan` command with vars"""
-    os.chdir("infrastructure")
-    tf_vars = {
-        "env": "vars/dev.tfvars.tf",
-        "secret": "vars/secret.tfvars.tf",
-    }
-    terraform_plan(tf_vars)
-
-
-def terraform_plan(tf_vars: dict[str, str]):
-    tf_command = f"terraform plan -var-file={tf_vars["env"]} -var-file={tf_vars["secret"]}"
+def terraform_plan():
+    tf_command = f"terraform plan -var-file={ENV_TF_VARS_FILE} -var-file={SECRET_TF_VARS_FILE}"
     print(tf_command)
-    out = subprocess.run(tf_command)
-    if out.returncode != 0:
-        sys.exit(out.returncode)
+    subprocess.run(tf_command,
+                   cwd="infrastructure",
+                   check=True,
+                   shell=True)
 
 
 if __name__ == "__main__":
-    main()
+    terraform_plan()
