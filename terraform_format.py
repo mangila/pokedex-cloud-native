@@ -12,7 +12,7 @@ def main():
 def terraform_format():
     tf_command = "terraform fmt -check"
     print(tf_command)
-    out = subprocess.run(tf_command)
+    out = subprocess.run(tf_command, check=True, shell=True)
     if out.returncode != 0:
         sys.exit(out.returncode)
 
