@@ -3,10 +3,8 @@ version: 2.1
 executors:
   python-terraform-executor:
     docker:
-      - image: cimg/go:1.24.1
       - image: cimg/deploy:2025.01
-      - image: cimg/python:3.13.2
-
+      - image: cimg/python:3.13
 jobs:
   publish:
     executor: python-terraform-executor
@@ -14,7 +12,7 @@ jobs:
       - checkout
       - run:
           name: asdf
-          command: which go
+          command: sudo apt update -y && sudo apt install golang -y
       - run:
           name: terraform
           command: terraform version
