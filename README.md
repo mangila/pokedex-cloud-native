@@ -1,6 +1,6 @@
 # pokedex-cloud-native
 
-## infrastructure
+## project
 
 #### Terraform
 
@@ -8,14 +8,14 @@
 
 create secrets file with AWS for secret key authentication.
 
-`infrastructure/vars/secret.tfvars.tf`
+`project/vars/secret.tfvars.tf`
 
 ```terraform
 aws_access_key = ""
 aws_secret_key = ""
 ```
 
-## infrastructure/lambda_src
+## project/lambda_src
 
 lambdas source code - golang workspace project
 
@@ -43,6 +43,14 @@ run `terraform destroy -auto-approve` with vars
 
 run `terraform fmt -check` with vars
 
+## terraform_init.py
+
+run `terraform init`
+
 ## terraform_plan.py
 
 run `terraform plan`
+
+## terraform_vars.py
+
+terraform tf.vars files location shared variables
