@@ -12,6 +12,16 @@ resource "aws_lambda_function" "example_lambda" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "example_lambda_log_group" {
+  name              = format("/aws/lambda/%s", aws_lambda_function.example_lambda.function_name)
+  retention_in_days = 7
+}
+
+output "example_lambda_log_group" {
+  description = "Lambda function log group"
+  value       = aws_cloudwatch_log_group.example_lambda_log_group.name
+}
+
 output "example_lambda_name" {
   description = "Lambda function name"
   value       = aws_lambda_function.example_lambda.function_name
