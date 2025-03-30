@@ -3,8 +3,8 @@ version: 2.1
 executors:
   python-terraform-executor:
     docker:
-      - image: circleci/python:3.9  # Python base image
-      - image: hashicorp/terraform:light  # Terraform Docker image for support
+      - image: cimg/python
+      - image: cimg/terraform
 
 jobs:
   publish:
