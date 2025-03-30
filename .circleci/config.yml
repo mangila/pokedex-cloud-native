@@ -1,17 +1,20 @@
 version: 2.1
 
-orbs:
-  python: circleci/python@3.0.0
-  terraform: circleci/terraform@3.6.0
+executors:
+  python-terraform-executor:
+    docker:
+      - image: circleci/python:3.9  # Python base image
+      - image: hashicorp/terraform:light  # Terraform Docker image for support
 
 jobs:
   publish:
-    executor: python/default
-    docker:
-      - hashicorp/terraform:light
+    executor: python-terraform-executor
     steps:
       - checkout
-      - run: python terraform_format.py
+      - run:
+          name: Execute Python Script
+          command: python terraform_format.py
+
 workflows:
   main:
     jobs:
