@@ -35,6 +35,6 @@ repos:
         language: system
         verbose: true
         require_serial: true
-        files: "^infrastructure"
+        files: ^(infrastructure|infrastructure/lambda_src)
         stages:
           - pre-push
