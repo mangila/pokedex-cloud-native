@@ -2,6 +2,7 @@
 *.zip
 *.bin
 bootstrap
+__pycache__
 secret.tfvars.tf
 go.work
 .terraform.lock.hcl

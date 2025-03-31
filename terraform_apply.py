@@ -7,7 +7,7 @@ def terraform_apply():
     tf_command = f"terraform apply -var-file={ENV_TF_VARS_FILE} -var-file={SECRET_TF_VARS_FILE}"
     print(tf_command)
     subprocess.run(tf_command,
-                   cwd="project",
+                   cwd="app",
                    check=True,
                    shell=True)
 

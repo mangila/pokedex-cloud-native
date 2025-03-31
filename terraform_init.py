@@ -5,7 +5,7 @@ def terraform_init():
     tf_command = "terraform init"
     print(tf_command)
     subprocess.run(tf_command,
-                   cwd="project",
+                   cwd="app",
                    check=True,
                    shell=True)
 

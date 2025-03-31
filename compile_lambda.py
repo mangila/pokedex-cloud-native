@@ -18,7 +18,7 @@ def build_go_binaries(lambda_name):
     env["GOARCH"] = "amd64"
     env["CGO_ENABLED "] = "0"
     go_build_command = "go build -o bootstrap main.go"
-    cwd = f"project/lambda_src/{lambda_name}"
+    cwd = f"app/lambda_src/{lambda_name}"
     subprocess.run(go_build_command,
                    cwd=cwd,
                    env=env,
