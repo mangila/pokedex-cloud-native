@@ -7,6 +7,7 @@ executors:
 jobs:
   publish:
     executor: deploy-executor
+    parallelism: 1
     steps:
       - checkout
       - run:
@@ -30,10 +31,19 @@ jobs:
       - run:
           name: python compile_lambda.py
           command: python compile_lambda.py
-      # TODO cache tf state
+      - restore_cache:
+          keys:
+            - terraform_state_key
       - run:
           name: python terraform_init.py
           command: python terraform_init.py
+      - save_cache:
+          name: Terraform state caching in CircleCI
+          key: terraform_state_key
+          paths:
+            - app/.terraform
+            - app/terraform.tfstate
+            - app/terraform.lock.hcl
 
 workflows:
   main:
