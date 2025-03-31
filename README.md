@@ -11,16 +11,17 @@
 
 #### Terraform
 
-* AWS provider
+* AWS
+* VPC
+* S3
+* Lambda
 
-create secrets file with AWS for secret key authentication.
+## app/vars
 
-`app/vars/secret.tfvars.tf`
+Terraform var files
 
-```terraform
-aws_access_key = ""
-aws_secret_key = ""
-```
+- dev.tfvars.tf -- env stuffs for terrafrom
+- secret.tfvars.tf -- aws secret and access key (gitignored)
 
 ## app/lambda_src
 

@@ -91,14 +91,18 @@ jobs:
 workflows:
   main:
     jobs:
-      - compile-go-lambda
+      - compile-go-lambda:
+          name: Compile Golang for AWS Lambda deployment
       - terraform-plan:
+          name: Format and Plan with Terraform
           requires:
             - compile-go-lambda
       - hold:
+          name: Verify the Terraform plan
           type: approval
           requires:
             - terraform-plan
       - terraform-apply:
+          name: Apply the Terraform plan to AWS
           requires:
             - hold
