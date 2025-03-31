@@ -1,54 +1,61 @@
 version: 2.1
 
-
-orbs:
-  terraform: circleci/terraform@3.6.0
-  golang: circleci/go@3.0.0
-
+executors:
+  golang-executor:
+    docker:
+      - image: cimg/go:1.24.1
+  deploy-executor:
+    docker:
+      - image: cimg/deploy:2025.01
 jobs:
-  publish:
-    executor: terraform/default
+  compile-go-lambda:
+    executor: golang-executor
     steps:
       - checkout
-      - run:
-          name: verify python
-          command: python --version
-      - run:
-          name: install golang
-          command: |
-            wget https://go.dev/dl/go1.24.1.linux-amd64.tar.gz
-            tar -C /usr/local -xzf go1.24.1.linux-amd64.tar.gz
-            echo 'export PATH=$PATH:/usr/local/go/bin' >> $BASH_ENV
       - run:
           name: verify golang
           command: go version
       - run:
+          name: verify python
+          command: python --version
+      - run:
           name: python compile_lambda.py
           command: python compile_lambda.py
+          persist_to_workspace:
+            root: .
+            paths:
+  publish:
+    executor: deploy-executor
+    parallelism: 1
+    steps:
+      - checkout
+      - attach_workspace:
+          name: Get shared Workflow workspace
+          at: ~/
+      - run:
+          name: verify terraform
+          command: terraform version
+      - run:
+          name: verify python
+          command: python --version
       - run:
           name: Set up AWS Secrets
           command: |
-            cat \<<EOF > app/vars/secret.tfvars.tf
+            cat <<EOF > app/vars/secret.tfvars.tf
                 aws_access_key = "$AWS_ACCESS_KEY"
                 aws_secret_key = "$AWS_SECRET_KEY"
-            EOF
-      - terraform/init:
-          path: app
-      - terraform/validate:
-          path: app
-      - terraform/fmt:
-          path: app
-      - terraform/plan:
-          path: app
-      - terraform/apply:
-          path: app
-      - terraform/plan:
-          destroy_plan: true
-          path: app
-      - terraform/destroy:
-          path: app
+                EOF
+      - run:
+          name: python terraform_init.py
+          command: python terraform_init.py
+      - run:
+          name: python terraform_apply.py
+          command: python terraform_apply.py
 
 workflows:
   main:
     jobs:
-      - publish
+      - compile-go-lambda
+      - publish:
+          requires:
+            - compile-go-lambda
