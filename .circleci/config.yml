@@ -43,7 +43,7 @@ jobs:
           paths:
             - app/.terraform
             - app/terraform.tfstate
-            - app/terraform.lock.hcl
+            - app/.terraform.lock.hcl
 
 workflows:
   main:
