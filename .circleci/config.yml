@@ -35,6 +35,13 @@ jobs:
           name: Attach CircleCI workspace
           at: .
       - run:
+          name: Set up AWS Secrets
+          command: |
+            cat \<<EOF > app/vars/secret.tfvars.tf
+                aws_access_key = "$AWS_ACCESS_KEY"
+                aws_secret_key = "$AWS_SECRET_KEY"
+            EOF
+      - run:
           name: verify terraform
           command: terraform version
       - run:
@@ -62,18 +69,18 @@ jobs:
           name: Attach CircleCI workspace
           at: .
       - run:
-          name: verify terraform
-          command: terraform version
-      - run:
-          name: verify python
-          command: python --version
-      - run:
           name: Set up AWS Secrets
           command: |
             cat \<<EOF > app/vars/secret.tfvars.tf
                 aws_access_key = "$AWS_ACCESS_KEY"
                 aws_secret_key = "$AWS_SECRET_KEY"
             EOF
+      - run:
+          name: verify terraform
+          command: terraform version
+      - run:
+          name: verify python
+          command: python --version
       - run:
           name: python terraform_init.py
           command: python terraform_init.py
