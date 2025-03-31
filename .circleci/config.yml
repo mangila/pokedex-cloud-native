@@ -36,10 +36,12 @@ jobs:
           keys:
             - terraform_state_key
       - run:
-          name: Create vars/secret.tfvars.tf
+          name: Set up AWS Secrets
           command: |
-            echo "aws_access_key = $AWS_ACCESS_KEY" > app/vars/secret.tfvars.tf
-            echo "aws_secret_key = $AWS_SECRET_KEY" >> app/vars/secret.tfvars.tf
+            cat <<EOF > app/vars/secret.tfvars.tf
+                aws_access_key = "$AWS_ACCESS_KEY"
+                aws_secret_key = "$AWS_SECRET_KEY"
+                EOF
       - run:
           name: python terraform_init.py
           command: python terraform_init.py
