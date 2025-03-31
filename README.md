@@ -47,11 +47,11 @@ run `terraform fmt -check` with vars
 
 ## terraform_init.py
 
-run `terraform init`
+run `terraform init` with login
 
 ## terraform_plan.py
 
-run `terraform plan`
+run `terraform plan` with vars
 
 ## terraform_vars.py
 

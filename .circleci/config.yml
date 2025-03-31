@@ -85,9 +85,6 @@ jobs:
           name: python terraform_init.py
           command: python terraform_init.py
       - run:
-          name: python terraform_destroy.py
-          command: python terraform_destroy.py
-      - run:
           name: python terraform_apply.py
           command: python terraform_apply.py
 
