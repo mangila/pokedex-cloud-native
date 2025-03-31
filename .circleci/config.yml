@@ -41,7 +41,7 @@ jobs:
             cat \<<EOF > app/vars/secret.tfvars.tf
                 aws_access_key = "$AWS_ACCESS_KEY"
                 aws_secret_key = "$AWS_SECRET_KEY"
-                EOF
+            EOF
       - run:
           name: python terraform_init.py
           command: python terraform_init.py
