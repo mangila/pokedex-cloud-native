@@ -34,7 +34,7 @@ jobs:
       - restore_cache:
           name: Restore cache Terraform state caching in CircleCI
           keys:
-            - terraform_state_key
+            - terraform_state_cache_key
       - run:
           name: Set up AWS Secrets
           command: |
@@ -45,16 +45,14 @@ jobs:
       - run:
           name: python terraform_init.py
           command: python terraform_init.py
-      - save_cache:
-          name: Save cache Terraform state caching in CircleCI
-          key: terraform_state_key
-          paths:
-            - app/.terraform
-            - app/terraform.tfstate
-            - app/.terraform.lock.hcl
       - run:
           name: python terraform_apply.py
           command: python terraform_apply.py
+      - save_cache:
+          name: Save cache Terraform state caching in CircleCI
+          key: terraform_state_cache_key
+          paths:
+            - app
 
 workflows:
   main:
