@@ -1,18 +1,14 @@
 version: 2.1
 
-executors:
-  deploy-executor:
-    docker:
-      - image: cimg/deploy:2025.01
+
+orbs:
+  terraform: circleci/terraform@3.6.0
+
 jobs:
-  publish:
-    executor: deploy-executor
-    parallelism: 1
+  single-job-lifecycle:
+    executor: terraform/default
     steps:
       - checkout
-      - run:
-          name: update machine
-          command: sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y
       - run:
           name: install golang
           command: |
@@ -23,18 +19,11 @@ jobs:
           name: verify golang
           command: go version
       - run:
-          name: verify terraform
-          command: terraform version
-      - run:
           name: verify python
           command: python --version
       - run:
           name: python compile_lambda.py
           command: python compile_lambda.py
-      - restore_cache:
-          name: Restore cache Terraform state caching in CircleCI
-          keys:
-            - terraform_state_cache_key
       - run:
           name: Set up AWS Secrets
           command: |
@@ -42,17 +31,21 @@ jobs:
                 aws_access_key = "$AWS_ACCESS_KEY"
                 aws_secret_key = "$AWS_SECRET_KEY"
             EOF
-      - run:
-          name: python terraform_init.py
-          command: python terraform_init.py
-      - run:
-          name: python terraform_apply.py
-          command: python terraform_apply.py
-      - save_cache:
-          name: Save cache Terraform state caching in CircleCI
-          key: terraform_state_cache_key
-          paths:
-            - app
+      - terraform/init:
+          path: app
+      - terraform/validate:
+          path: app
+      - terraform/fmt:
+          path: app
+      - terraform/plan:
+          path: app
+      - terraform/apply:
+          path: app
+      - terraform/plan:
+          destroy_plan: true
+          path: app
+      - terraform/destroy:
+          path: app
 
 workflows:
   main:
