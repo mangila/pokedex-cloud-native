@@ -41,7 +41,7 @@ jobs:
       - run:
           name: Set up AWS Secrets
           command: |
-            cat /<<EOF > app/vars/secret.tfvars.tf
+            cat \<<EOF > app/vars/secret.tfvars.tf
                 aws_access_key = "$AWS_ACCESS_KEY"
                 aws_secret_key = "$AWS_SECRET_KEY"
             EOF
