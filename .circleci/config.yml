@@ -10,6 +10,7 @@ executors:
 jobs:
   compile-go-lambda:
     executor: golang-executor
+    parallelism: 1
     steps:
       - checkout
       - run:
@@ -24,14 +25,42 @@ jobs:
           persist_to_workspace:
             root: .
             paths:
-  publish:
+              - .
+  terraform-plan:
     executor: deploy-executor
     parallelism: 1
     steps:
       - checkout
       - attach_workspace:
-          name: Get shared Workflow workspace
-          at: ~/
+          name: Attach CircleCI workspace
+          at: .
+      - run:
+          name: verify terraform
+          command: terraform version
+      - run:
+          name: verify python
+          command: python --version
+      - run:
+          name: python terraform_init.py
+          command: python terraform_init.py
+          persist_to_workspace:
+            root: .
+            paths:
+              - .
+      - run:
+          name: python terraform_format.py
+          command: python terraform_format.py
+      - run:
+          name: python terraform_plan.py
+          command: python terraform_plan.py
+  terraform-apply:
+    executor: deploy-executor
+    parallelism: 1
+    steps:
+      - checkout
+      - attach_workspace:
+          name: Attach CircleCI workspace
+          at: .
       - run:
           name: verify terraform
           command: terraform version
@@ -49,6 +78,9 @@ jobs:
           name: python terraform_init.py
           command: python terraform_init.py
       - run:
+          name: python terraform_destroy.py
+          command: python terraform_destroy.py
+      - run:
           name: python terraform_apply.py
           command: python terraform_apply.py
 
@@ -56,6 +88,14 @@ workflows:
   main:
     jobs:
       - compile-go-lambda
-      - publish:
+      - terraform-plan:
+          type: approval
           requires:
             - compile-go-lambda
+      - hold:
+          type: approval
+          requires:
+            - terraform-plan
+      - terraform-apply:
+          requires:
+            - hold
