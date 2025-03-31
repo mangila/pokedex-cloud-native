@@ -89,7 +89,6 @@ workflows:
     jobs:
       - compile-go-lambda
       - terraform-plan:
-          type: approval
           requires:
             - compile-go-lambda
       - hold:
