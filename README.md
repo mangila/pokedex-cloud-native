@@ -1,6 +1,8 @@
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/mangila/pokedex-cloud-native/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/mangila/pokedex-cloud-native/tree/main)
+
 # pokedex-cloud-native
 
-## project
+## app
 
 #### Terraform
 
@@ -8,14 +10,14 @@
 
 create secrets file with AWS for secret key authentication.
 
-`project/vars/secret.tfvars.tf`
+`app/vars/secret.tfvars.tf`
 
 ```terraform
 aws_access_key = ""
 aws_secret_key = ""
 ```
 
-## project/lambda_src
+## app/lambda_src
 
 lambdas source code - golang workspace project
 
