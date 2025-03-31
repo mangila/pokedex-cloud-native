@@ -3,12 +3,16 @@ version: 2.1
 
 orbs:
   terraform: circleci/terraform@3.6.0
+  golang: circleci/go@3.0.0
 
 jobs:
   publish:
     executor: terraform/default
     steps:
       - checkout
+      - run:
+          name: verify python
+          command: python --version
       - run:
           name: install golang
           command: |
@@ -18,9 +22,6 @@ jobs:
       - run:
           name: verify golang
           command: go version
-      - run:
-          name: verify python
-          command: python --version
       - run:
           name: python compile_lambda.py
           command: python compile_lambda.py
