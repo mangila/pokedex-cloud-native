@@ -12,5 +12,6 @@ def terraform_apply():
                    shell=True)
 
 
+
 if __name__ == "__main__":
     terraform_apply()
