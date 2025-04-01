@@ -47,7 +47,7 @@ jobs:
           name: Persist Lambda binaries to CircleCI Workspace
           root: .
           paths:
-            - app/lambda_src/hello/bootstrap
+            - app/lambda_src/hello/bootstrap.zip
   terraform-plan:
     executor: deploy-executor
     parallelism: 1
