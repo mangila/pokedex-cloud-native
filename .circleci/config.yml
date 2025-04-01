@@ -47,7 +47,7 @@ jobs:
           name: Persist Lambda binaries to CircleCI Workspace
           root: .
           paths:
-            - app/lambda_src/hello/bootstrap.zip
+            - app/lambda_src/hello/bootstrap
   terraform-plan:
     executor: deploy-executor
     parallelism: 1
@@ -78,6 +78,11 @@ jobs:
       - run:
           name: Terraform Plan
           command: python terraform_plan.py
+      - persist_to_workspace:
+          name: Persist Lambda zip to CircleCI Workspace
+          root: .
+          paths:
+            - app/lambda_src/hello/bootstrap.zip
       - persist_to_workspace:
           name: Persist pokedex-tfplan to CircleCI Workspace
           root: .
