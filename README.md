@@ -11,10 +11,16 @@
 
 #### Terraform
 
-* AWS
 * VPC
+    * Subnet
+    * Internet Gateway
+    * ACL
+    * Security Group
+* IAM
 * S3
 * Lambda
+* Sqs
+* EventBridge Pipe
 
 ## app/vars
 
