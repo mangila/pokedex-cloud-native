@@ -44,8 +44,10 @@ jobs:
           name: Compile Golang
           command: python compile_lambda.py
       - persist_to_workspace:
-          root: .
+          name: Persist pokedex-tfplan to CircleCI Workspace
+          root: app/lambda_src/hello
           paths:
+            - bootstrap
   terraform-plan:
     executor: deploy-executor
     parallelism: 1
@@ -77,8 +79,9 @@ jobs:
           name: Terraform Plan
           command: python terraform_plan.py
       - persist_to_workspace:
-          root: .
-          paths:
+          name: Persist pokedex-tfplan to CircleCI Workspace
+          root: app
+          paths: pokedex-tfplan
   terraform-apply:
     executor: deploy-executor
     parallelism: 1
@@ -87,13 +90,6 @@ jobs:
       - attach_workspace:
           name: Attach CircleCI workspace
           at: .
-      - run:
-          name: Set up AWS Secrets
-          command: |
-            cat \<<EOF > app/vars/secret.tfvars.tf
-                aws_access_key = "$AWS_ACCESS_KEY"
-                aws_secret_key = "$AWS_SECRET_KEY"
-            EOF
       - run:
           name: Verify Terraform
           command: terraform version
