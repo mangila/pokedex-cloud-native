@@ -44,10 +44,10 @@ jobs:
           name: Compile Golang
           command: python compile_lambda.py
       - persist_to_workspace:
-          name: Persist pokedex-tfplan to CircleCI Workspace
-          root: app/lambda_src/hello
+          name: Persist Lambda binaries to CircleCI Workspace
+          root: .
           paths:
-            - bootstrap
+            - app/lambda_src/hello/bootstrap
   terraform-plan:
     executor: deploy-executor
     parallelism: 1
@@ -80,8 +80,9 @@ jobs:
           command: python terraform_plan.py
       - persist_to_workspace:
           name: Persist pokedex-tfplan to CircleCI Workspace
-          root: app
-          paths: pokedex-tfplan
+          root: .
+          paths:
+            - app/pokedex-tfplan
   terraform-apply:
     executor: deploy-executor
     parallelism: 1
