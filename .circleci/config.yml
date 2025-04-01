@@ -43,9 +43,9 @@ jobs:
       - run:
           name: Compile Golang
           command: python compile_lambda.py
-          persist_to_workspace:
-            root: .
-            paths:
+      - persist_to_workspace:
+          root: .
+          paths:
   terraform-plan:
     executor: deploy-executor
     parallelism: 1
@@ -76,13 +76,14 @@ jobs:
       - run:
           name: Terraform Plan
           command: python terraform_plan.py
-          persist_to_workspace:
-            root: .
-            paths: app/pokedex-tfplan
+      - persist_to_workspace:
+          root: .
+          paths:
   terraform-apply:
     executor: deploy-executor
     parallelism: 1
     steps:
+      - checkout
       - attach_workspace:
           name: Attach CircleCI workspace
           at: .
