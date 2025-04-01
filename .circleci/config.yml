@@ -57,13 +57,6 @@ jobs:
           name: Attach CircleCI workspace
           at: .
       - run:
-          name: Set up AWS Secrets
-          command: |
-            cat \<<EOF > app/vars/secret.tfvars.tf
-                aws_access_key = "$AWS_ACCESS_KEY"
-                aws_secret_key = "$AWS_SECRET_KEY"
-            EOF
-      - run:
           name: Verify Terraform
           command: terraform version
       - run:
@@ -79,7 +72,7 @@ jobs:
           name: Persist Lambda zip to CircleCI Workspace
           root: .
           paths:
-            - app/lambda_src/hello/bootstrap.zip
+            - app/lambda_src/hello/hello-bootstrap.zip
       - persist_to_workspace:
           name: Persist pokedex-tfplan to CircleCI Workspace
           root: .
@@ -93,13 +86,6 @@ jobs:
       - attach_workspace:
           name: Attach CircleCI workspace
           at: .
-      - run:
-          name: Set up AWS Secrets
-          command: |
-            cat \<<EOF > app/vars/secret.tfvars.tf
-                aws_access_key = "$AWS_ACCESS_KEY"
-                aws_secret_key = "$AWS_SECRET_KEY"
-            EOF
       - run:
           name: Verify Terraform
           command: terraform version
