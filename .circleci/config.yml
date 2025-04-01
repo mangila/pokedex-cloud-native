@@ -1,93 +1,5 @@
 version: 2.1
 
-executors:
-  golang-executor:
-    docker:
-      - image: cimg/go:1.24.1
-  deploy-executor:
-    docker:
-      - image: cimg/deploy:2025.01
-jobs:
-  compile-go-lambda:
-    executor: golang-executor
-    parallelism: 1
-    steps:
-      - checkout
-      - run:
-          name: verify golang
-          command: go version
-      - run:
-          name: verify python
-          command: python --version
-      - run:
-          name: python compile_lambda.py
-          command: python compile_lambda.py
-          persist_to_workspace:
-            root: .
-            paths:
-              - .
-  terraform-plan:
-    executor: deploy-executor
-    parallelism: 1
-    steps:
-      - checkout
-      - attach_workspace:
-          name: Attach CircleCI workspace
-          at: .
-      - run:
-          name: Set up AWS Secrets
-          command: |
-            cat \<<EOF > app/vars/secret.tfvars.tf
-                aws_access_key = "$AWS_ACCESS_KEY"
-                aws_secret_key = "$AWS_SECRET_KEY"
-            EOF
-      - run:
-          name: verify terraform
-          command: terraform version
-      - run:
-          name: verify python
-          command: python --version
-      - run:
-          name: python terraform_init.py
-          command: python terraform_init.py
-          persist_to_workspace:
-            root: .
-            paths:
-              - .
-      - run:
-          name: python terraform_format.py
-          command: python terraform_format.py
-      - run:
-          name: python terraform_plan.py
-          command: python terraform_plan.py
-  terraform-apply:
-    executor: deploy-executor
-    parallelism: 1
-    steps:
-      - checkout
-      - attach_workspace:
-          name: Attach CircleCI workspace
-          at: .
-      - run:
-          name: Set up AWS Secrets
-          command: |
-            cat \<<EOF > app/vars/secret.tfvars.tf
-                aws_access_key = "$AWS_ACCESS_KEY"
-                aws_secret_key = "$AWS_SECRET_KEY"
-            EOF
-      - run:
-          name: verify terraform
-          command: terraform version
-      - run:
-          name: verify python
-          command: python --version
-      - run:
-          name: python terraform_init.py
-          command: python terraform_init.py
-      - run:
-          name: python terraform_apply.py
-          command: python terraform_apply.py
-
 workflows:
   main:
     when:
@@ -109,3 +21,87 @@ workflows:
           name: Apply the Terraform plan to AWS
           requires:
             - Verify the Terraform plan
+executors:
+  golang-executor:
+    docker:
+      - image: cimg/go:1.24.1
+  deploy-executor:
+    docker:
+      - image: cimg/deploy:2025.01
+jobs:
+  compile-go-lambda:
+    executor: golang-executor
+    parallelism: 1
+    steps:
+      - checkout
+      - run:
+          name: Verify golang
+          command: go version
+      - run:
+          name: Verify python
+          command: python --version
+      - run:
+          name: Compile Golang
+          command: python compile_lambda.py
+          persist_to_workspace:
+            root: .
+            paths:
+              - .
+  terraform-plan:
+    executor: deploy-executor
+    parallelism: 1
+    steps:
+      - checkout
+      - attach_workspace:
+          name: Attach CircleCI workspace
+          at: .
+      - run:
+          name: Set up AWS Secrets
+          command: |
+            cat \<<EOF > app/vars/secret.tfvars.tf
+                aws_access_key = "$AWS_ACCESS_KEY"
+                aws_secret_key = "$AWS_SECRET_KEY"
+            EOF
+      - run:
+          name: Verify Terraform
+          command: terraform version
+      - run:
+          name: Verify Python
+          command: python --version
+      - run:
+          name: Terraform Init
+          command: python terraform_init.py
+          persist_to_workspace:
+            root: .
+            paths:
+              - .
+      - run:
+          name: Terraform Format Check
+          command: python terraform_format.py
+      - run:
+          name: Terraform Plan
+          command: python terraform_plan.py
+  terraform-apply:
+    executor: deploy-executor
+    parallelism: 1
+    steps:
+      - checkout
+      - attach_workspace:
+          name: Attach CircleCI workspace
+          at: .
+      - run:
+          name: Set up AWS Secrets
+          command: |
+            cat \<<EOF > app/vars/secret.tfvars.tf
+                aws_access_key = "$AWS_ACCESS_KEY"
+                aws_secret_key = "$AWS_SECRET_KEY"
+            EOF
+      - run:
+          name: Verify Terraform
+          command: terraform version
+      - run:
+          name: Verify Python
+          command: python --version
+      - run:
+          name: Terraform Apply
+          command: python terraform_apply.py
