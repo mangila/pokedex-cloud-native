@@ -24,5 +24,4 @@ resource "aws_s3_object" "hello_s3_object" {
   bucket = aws_s3_bucket.pokedex_lambda_bucket.id
   key    = "hello-bootstrap.zip"
   source = data.archive_file.hello_zip.output_path
-  etag   = filemd5(data.archive_file.hello_zip.output_path)
 }
