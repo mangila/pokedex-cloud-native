@@ -26,3 +26,8 @@ resource "aws_s3_object" "hello_s3_object" {
   source      = data.archive_file.hello_zip.output_path
   source_hash = data.archive_file.hello_zip.output_base64sha256
 }
+
+output "hello_s3_object_source_hash" {
+  description = "hello-bootstrap.zip - source hash"
+  value       = data.archive_file.hello_zip.output_base64sha256
+}
