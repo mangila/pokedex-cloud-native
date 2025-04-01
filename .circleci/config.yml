@@ -78,12 +78,11 @@ jobs:
           command: python terraform_plan.py
           persist_to_workspace:
             root: .
-            paths:
+            paths: app/pokedex-tfplan
   terraform-apply:
     executor: deploy-executor
     parallelism: 1
     steps:
-      - checkout
       - attach_workspace:
           name: Attach CircleCI workspace
           at: .
