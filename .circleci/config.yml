@@ -90,13 +90,12 @@ jobs:
 
 workflows:
   main:
+    when:
+      and:
+        - equal: [ main, << pipeline.git.branch >> ]
     jobs:
       - compile-go-lambda:
           name: Compile Golang for AWS Lambda deployment
-          filters:
-            branches:
-              only:
-                - main
       - terraform-plan:
           name: Format and Plan with Terraform
           requires:
