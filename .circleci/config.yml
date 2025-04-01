@@ -71,16 +71,16 @@ jobs:
       - run:
           name: Terraform Init
           command: python terraform_init.py
-          persist_to_workspace:
-            root: .
-            paths:
-              - .
       - run:
           name: Terraform Format Check
           command: python terraform_format.py
       - run:
           name: Terraform Plan
           command: python terraform_plan.py
+          persist_to_workspace:
+            root: .
+            paths:
+              - .
   terraform-apply:
     executor: deploy-executor
     parallelism: 1

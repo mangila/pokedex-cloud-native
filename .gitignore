@@ -5,6 +5,7 @@ bootstrap
 __pycache__
 secret.tfvars.tf
 go.work
+pokedex-tfplan
 .terraform.lock.hcl
 .terraform
 terraform.tfstate
