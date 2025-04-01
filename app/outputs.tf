@@ -13,6 +13,11 @@ output "example_lambda_name" {
   value       = aws_lambda_function.example_lambda.function_name
 }
 
+output "example_lambda_name_source_hash" {
+  description = "example_lambda - source hash"
+  value       = aws_lambda_function.example_lambda.source_code_hash
+}
+
 output "pokedex_lambda_bucket" {
   value       = aws_s3_bucket.pokedex_lambda_bucket.bucket
   description = "Bucket name"
