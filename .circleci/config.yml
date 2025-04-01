@@ -46,7 +46,6 @@ jobs:
           persist_to_workspace:
             root: .
             paths:
-              - .
   terraform-plan:
     executor: deploy-executor
     parallelism: 1
@@ -80,7 +79,6 @@ jobs:
           persist_to_workspace:
             root: .
             paths:
-              - .
   terraform-apply:
     executor: deploy-executor
     parallelism: 1
