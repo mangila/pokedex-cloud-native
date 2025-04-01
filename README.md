@@ -20,7 +20,11 @@
 * S3
 * Lambda
 * Sqs
+* Cloudwatch
 * EventBridge Pipe
+
+* Terraform Archive
+* Terraform Random
 
 ## app/vars
 
