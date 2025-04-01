@@ -9,14 +9,14 @@ workflows:
       - compile-go-lambda:
           name: Compile Golang for AWS Lambda deployment
       - terraform-plan:
-          name: Format and Plan with Terraform
+          name: Create Terraform Plan
           requires:
             - Compile Golang for AWS Lambda deployment
       - hold:
           name: Verify the Terraform plan
           type: approval
           requires:
-            - Format and Plan with Terraform
+            - Create Terraform Plan
       - terraform-apply:
           name: Apply the Terraform plan to AWS
           requires:
@@ -72,9 +72,6 @@ jobs:
       - run:
           name: Terraform Init
           command: python terraform_init.py
-      - run:
-          name: Terraform Format Check
-          command: python terraform_format.py
       - run:
           name: Terraform Plan
           command: python terraform_plan.py
