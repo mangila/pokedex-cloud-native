@@ -31,7 +31,6 @@ executors:
 jobs:
   compile-go-lambda:
     serial-group: << pipeline.project.slug >>/compile-group
-
     executor: golang-executor
     parallelism: 1
     steps:
