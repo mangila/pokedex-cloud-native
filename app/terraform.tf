@@ -65,6 +65,7 @@ module "compute_module" {
       function_name         = local.lambda_config.generation.function_name
       handler               = local.lambda_config.generation.handler
       runtime               = local.lambda_config.generation.runtime
+      timeout               = local.lambda_config.generation.timeout
       role_arn              = module.security_module.lambda_execution_role.arn
       s3_bucket_id          = module.storage_module.lambda-build-s3-bucket.id
       s3_key                = local.lambda_config.generation.zip_file_name

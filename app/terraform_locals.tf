@@ -6,6 +6,7 @@ locals {
       zip_file_name = "generation-lambda.zip"
       handler       = "bootstrap"
       runtime       = "provided.al2023"
+      timeout       = 10
     }
   }
 }

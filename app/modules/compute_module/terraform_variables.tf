@@ -4,6 +4,7 @@ variable "create_lambdas" {
     function_name         = string
     handler               = string
     runtime               = string
+    timeout               = number
     role_arn              = string
     s3_bucket_id          = string
     s3_key                = string
