@@ -20,12 +20,3 @@ repos:
         files: "^app"
         stages:
           - pre-commit
-      - id: terraform_plan
-        name: Run terraform plan
-        entry: python terraform_plan.py
-        language: system
-        verbose: true
-        require_serial: true
-        files: "^app"
-        stages:
-          - pre-commit
