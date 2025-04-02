@@ -69,12 +69,12 @@ jobs:
           name: Terraform Plan
           command: python terraform_plan.py
       - persist_to_workspace:
-          name: Persist Lambda zip to CircleCI Workspace
+          name: Persist Lambda zip files to CircleCI Workspace
           root: .
           paths:
-            - app/lambda_src/hello/hello-bootstrap.zip
+            - app/hello-bootstrap.zip
       - persist_to_workspace:
-          name: Persist pokedex-tfplan to CircleCI Workspace
+          name: Persist 'pokedex-tfplan' to CircleCI Workspace
           root: .
           paths:
             - app/pokedex-tfplan

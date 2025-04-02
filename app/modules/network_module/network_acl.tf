@@ -8,7 +8,7 @@ resource "aws_network_acl_association" "pokedex_network_acl_association" {
 }
 
 resource "aws_network_acl_rule" "pokeapi_acl_rule_https_egress" {
-  count          = length(var.pokeapi_address_ranges)
+  count          = length(local.pokeapi_address_ranges)
   network_acl_id = aws_network_acl.pokedex_network_acl.id
   rule_number    = count.index + 100
   egress         = true
@@ -16,11 +16,11 @@ resource "aws_network_acl_rule" "pokeapi_acl_rule_https_egress" {
   from_port      = 443
   to_port        = 443
   rule_action    = "allow"
-  cidr_block     = var.pokeapi_address_ranges[count.index]
+  cidr_block     = local.pokeapi_address_ranges[count.index]
 }
 
 resource "aws_network_acl_rule" "pokeapi_media_acl_rule_https_egress" {
-  count          = length(var.pokeapi_media_address_ranges)
+  count          = length(local.pokeapi_media_address_ranges)
   network_acl_id = aws_network_acl.pokedex_network_acl.id
   rule_number    = count.index + 200
   egress         = true
@@ -28,5 +28,5 @@ resource "aws_network_acl_rule" "pokeapi_media_acl_rule_https_egress" {
   from_port      = 443
   to_port        = 443
   rule_action    = "allow"
-  cidr_block     = var.pokeapi_media_address_ranges[count.index]
+  cidr_block     = local.pokeapi_media_address_ranges[count.index]
 }

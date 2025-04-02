@@ -31,7 +31,7 @@
 Terraform var files
 
 - dev.tfvars.tf -- env stuffs for terrafrom
-- secret.tfvars.tf -- aws secret and access key (gitignored)
+- secret.tfvars.tf -- aws secret and access key (gitignored) or use TF_VARS
 
 ## app/lambda_src
 
