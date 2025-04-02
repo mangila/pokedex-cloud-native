@@ -15,12 +15,12 @@ workflows:
             - Compile Golang for AWS Lambda deployment
       - hold:
           name: Verify the Terraform plan
-          serial-group: << pipeline.project.slug >>/terraform-verify-group
           type: approval
           requires:
             - Create Terraform Plan
       - terraform-apply:
           name: Apply the Terraform plan to AWS
+          serial-group: << pipeline.project.slug >>/terraform-apply-group
           requires:
             - Verify the Terraform plan
 executors:
