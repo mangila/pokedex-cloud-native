@@ -1,4 +1,4 @@
-module hello
+module generation
 
 go 1.24
 

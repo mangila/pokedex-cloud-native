@@ -42,13 +42,16 @@ jobs:
           name: Verify python
           command: python --version
       - run:
-          name: Compile Golang
-          command: python compile_lambda.py
+          name: Test Golang
+          command: python test_go.py
+      - run:
+          name: Compile Golang Lambda
+          command: python compile_go_lambda.py
       - persist_to_workspace:
           name: Persist Lambda binaries to CircleCI Workspace
           root: .
           paths:
-            - app/lambda_src/hello/bootstrap
+            - app/lambda_src/generation/bootstrap
   terraform-plan:
     executor: deploy-executor
     steps:
@@ -72,7 +75,7 @@ jobs:
           name: Persist Lambda zip files to CircleCI Workspace
           root: .
           paths:
-            - app/hello-bootstrap.zip
+            - app/generation-lambda.zip
       - persist_to_workspace:
           name: Persist 'pokedex-tfplan' to CircleCI Workspace
           root: .

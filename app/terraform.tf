@@ -1,7 +1,6 @@
 terraform {
   cloud {
     organization = "mangila"
-
     workspaces {
       name = "pokedex-cloud-native-workspace"
     }
@@ -39,9 +38,9 @@ module "storage_module" {
 
   create_lambda_archive_s3_objects = [
     {
-      key         = local.lambda_config.hello.zip_file_name
-      source      = data.archive_file.hello_zip.output_path
-      source_hash = data.archive_file.hello_zip.output_base64sha256
+      key         = local.lambda_config.generation.zip_file_name
+      source      = data.archive_file.generation_lambda_zip.output_path
+      source_hash = data.archive_file.generation_lambda_zip.output_base64sha256
     }
   ]
 }
@@ -63,13 +62,13 @@ module "compute_module" {
 
   create_lambdas = [
     {
-      function_name         = local.lambda_config.hello.function_name
-      handler               = local.lambda_config.hello.handler
-      runtime               = local.lambda_config.hello.runtime
+      function_name         = local.lambda_config.generation.function_name
+      handler               = local.lambda_config.generation.handler
+      runtime               = local.lambda_config.generation.runtime
       role_arn              = module.security_module.lambda_execution_role.arn
       s3_bucket_id          = module.storage_module.lambda-build-s3-bucket.id
-      s3_key                = local.lambda_config.hello.zip_file_name
-      source_code_hash      = data.archive_file.hello_zip.output_base64sha256
+      s3_key                = local.lambda_config.generation.zip_file_name
+      source_code_hash      = data.archive_file.generation_lambda_zip.output_base64sha256
       environment_variables = {}
       vpc_config = {
         subnet_ids         = [module.network_module.pokedex_subnet.id]

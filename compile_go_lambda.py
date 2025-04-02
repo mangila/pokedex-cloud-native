@@ -4,7 +4,7 @@ import subprocess
 
 def main():
     lambdas = [
-        {"name": "hello"},
+        {"name": "generation"},
     ]
     for lambda_info in lambdas:
         lambda_name = lambda_info["name"]

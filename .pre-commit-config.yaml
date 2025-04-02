@@ -2,9 +2,18 @@ fail_fast: true
 repos:
   - repo: local
     hooks:
+      - id: test_go
+        name: test go code
+        entry: python test_go.py
+        language: system
+        verbose: true
+        require_serial: true
+        files: "^app/lambda_src"
+        stages:
+          - pre-commit
       - id: compile_lambda
         name: compile lambda go code
-        entry: python compile_lambda.py
+        entry: python compile_go_lambda.py
         language: system
         verbose: true
         require_serial: true
