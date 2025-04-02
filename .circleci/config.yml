@@ -42,6 +42,9 @@ jobs:
           name: Verify python
           command: python --version
       - run:
+          name: Go Workspace Init
+          command: python go_workspace_init.py
+      - run:
           name: Test Golang
           command: python test_go.py
       - run:

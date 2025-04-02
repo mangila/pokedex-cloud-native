@@ -12,12 +12,14 @@ Consume pokeapi.co as a Cloud Native app.
 Cloud infrastructure is created with Terraform together with Python helper scripts.
 
 - compile_lambda.py
+- go_workspace_init.py
 - terraform_apply.py
 - terraform_destroy.py
 - terraform_format.py
 - terraform_init.py
 - terraform_plan.py
 - terraform_vars.py
+- test_go.py
 
 pre-commit hooks for some automatic quality control
 
