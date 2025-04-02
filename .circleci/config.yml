@@ -30,7 +30,7 @@ executors:
       - image: cimg/deploy:2025.01
 jobs:
   compile-go-lambda:
-    serial-group: << pipeline.project.slug >>/compile-group
+    serial-group: compile-group
     executor: golang-executor
     parallelism: 1
     steps:
@@ -50,7 +50,7 @@ jobs:
           paths:
             - app/lambda_src/hello/bootstrap
   terraform-plan:
-    serial-group: << pipeline.project.slug >>/plan-group
+    serial-group: plan-group
     executor: deploy-executor
     parallelism: 1
     steps:
@@ -81,7 +81,7 @@ jobs:
           paths:
             - app/pokedex-tfplan
   terraform-apply:
-    serial-group: << pipeline.project.slug >>/deploy-group
+    serial-group: deploy-group
     executor: deploy-executor
     parallelism: 1
     steps:
