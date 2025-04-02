@@ -98,3 +98,4 @@ jobs:
       - run:
           name: Terraform Apply
           command: python terraform_apply.py
+
