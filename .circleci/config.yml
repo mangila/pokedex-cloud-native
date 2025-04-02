@@ -9,6 +9,7 @@ workflows:
       - compile-go-lambda:
           name: Compile Golang for AWS Lambda deployment
           serial-group: << pipeline.project.slug >>/compile-group
+
       - terraform-plan:
           name: Create Terraform Plan
           serial-group: << pipeline.project.slug >>/plan-group
