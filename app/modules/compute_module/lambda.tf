@@ -8,7 +8,9 @@ resource "aws_lambda_function" "created_lambdas" {
   s3_bucket        = var.create_lambdas[count.index].s3_bucket_id
   s3_key           = var.create_lambdas[count.index].s3_key
   source_code_hash = var.create_lambdas[count.index].source_code_hash
-
+  environment {
+    variables = var.create_lambdas[count.index].environment_variables
+  }
   vpc_config {
     subnet_ids         = var.create_lambdas[count.index].vpc_config.subnet_ids
     security_group_ids = var.create_lambdas[count.index].vpc_config.security_group_ids
