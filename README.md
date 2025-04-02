@@ -7,68 +7,20 @@
 
 # pokedex-cloud-native
 
-## app
+Consume pokeapi.co as a Cloud Native app.
 
-#### Terraform
+Cloud infrastructure is created with Terraform together with Python helper scripts.
 
-* VPC
-    * Subnet
-    * Internet Gateway
-    * ACL
-    * Security Group
-* IAM
-* S3
-* Lambda
-* Sqs
-* Cloudwatch
-* EventBridge Pipe
+- compile_lambda.py
+- terraform_apply.py
+- terraform_destroy.py
+- terraform_format.py
+- terraform_init.py
+- terraform_plan.py
+- terraform_vars.py
 
-* Terraform Archive
-* Terraform Random
+pre-commit hooks for some automatic quality control
 
-## app/vars
+- [pre-commit](https://pre-commit.com/) hooks see `.pre-commit-config.yaml`
 
-Terraform var files
-
-- dev.tfvars.tf -- env stuffs for terrafrom
-- secret.tfvars.tf -- aws secret and access key (gitignored) or use TF_VARS
-
-## app/lambda_src
-
-lambdas source code - golang workspace project
-
-`go work init <module1> <module2>`
-
-- hello - placeholder (WIP)
-
-- shared - structs, utils etc.
-
-## compile_lambda.py
-
-build golang binaries for aws lambda deployment
-
-- `go build -o bootstrap main.go`
-
-## terraform_apply.py
-
-run `terraform apply -auto-approve` with vars
-
-## terraform_destroy.py
-
-run `terraform destroy -auto-approve` with vars
-
-## terraform_format.py
-
-run `terraform fmt -check` with vars
-
-## terraform_init.py
-
-run `terraform init` with login
-
-## terraform_plan.py
-
-run `terraform plan` with vars
-
-## terraform_vars.py
-
-terraform tf.vars files location shared variables
+CircleCI for some CI deployment and Terraform state management as a Terraform workspace
