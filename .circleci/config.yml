@@ -82,6 +82,7 @@ jobs:
             - app/pokedex-tfplan
   terraform-apply:
     serial-group: deploy-group
+
     executor: deploy-executor
     parallelism: 1
     steps:
