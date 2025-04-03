@@ -1,7 +1,7 @@
 package pokeapi
 
 import (
-	"shared/models"
+	"pokedex/shared/models"
 	"strings"
 	"testing"
 )

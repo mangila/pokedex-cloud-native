@@ -2,6 +2,24 @@ fail_fast: true
 repos:
   - repo: local
     hooks:
+      - id: terraform_validate
+        name: Run terraform validate
+        entry: python terraform_validate.py
+        language: system
+        verbose: true
+        require_serial: true
+        files: "^app"
+        stages:
+          - pre-commit
+      - id: terraform_format
+        name: Run terraform fmt
+        entry: python terraform_format.py
+        language: system
+        verbose: true
+        require_serial: true
+        files: "^app"
+        stages:
+          - pre-commit
       - id: test_go
         name: test go code
         entry: python test_go.py
@@ -18,14 +36,5 @@ repos:
         verbose: true
         require_serial: true
         files: "^app/lambda_src"
-        stages:
-          - pre-commit
-      - id: terraform_format
-        name: Run terraform fmt
-        entry: python terraform_format.py
-        language: system
-        verbose: true
-        require_serial: true
-        files: "^app"
         stages:
           - pre-commit

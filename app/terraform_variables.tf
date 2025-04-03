@@ -16,6 +16,12 @@ variable "aws_region" {
   sensitive   = false
 }
 
+variable "aws_azs" {
+  type        = list(string)
+  description = "AWS Availability Zones"
+  sensitive   = false
+}
+
 variable "application_environment" {
   type        = string
   description = "Application environment for the infrastructure (dev, test, prod, etc..)"

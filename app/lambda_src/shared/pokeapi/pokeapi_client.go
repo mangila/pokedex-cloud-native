@@ -3,7 +3,7 @@ package pokeapi
 import (
 	"fmt"
 	"github.com/go-resty/resty/v2"
-	"shared/models"
+	"pokedex/shared/models"
 	"time"
 )
 

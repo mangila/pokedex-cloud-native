@@ -2,7 +2,7 @@ package models
 
 // Generation - e.g "generation-i"
 type Generation struct {
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required,generation"`
 }
 
 // GenerationResponse - https://pokeapi.co/api/v2/generation/<Generation.Name>

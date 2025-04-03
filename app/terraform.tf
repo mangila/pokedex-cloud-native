@@ -21,60 +21,41 @@ provider "aws" {
   }
 }
 
-module "messaging_module" {
-  source = "./modules/messaging_module"
-}
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
 
-module "network_module" {
-  source = "./modules/network_module"
-}
-
-module "security_module" {
-  source = "./modules/security_module"
-}
-
-module "storage_module" {
-  source = "./modules/storage_module"
-
-  create_lambda_archive_s3_objects = [
+  name                                                      = "pokedex_vpc"
+  default_vpc_enable_dns_hostnames                          = true
+  default_vpc_enable_dns_support                            = true
+  cidr                                                      = "10.0.0.0/16"
+  azs                                                       = var.aws_azs
+  private_subnets                                           = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets                                            = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  public_subnet_enable_resource_name_dns_a_record_on_launch = true
+  enable_nat_gateway                                        = true
+  single_nat_gateway                                        = true
+  nat_gateway_destination_cidr_block                        = "0.0.0.0/0"
+  default_security_group_egress = [
     {
-      key         = local.lambda_config.generation.zip_file_name
-      source      = data.archive_file.generation_lambda_zip.output_path
-      source_hash = data.archive_file.generation_lambda_zip.output_base64sha256
+      protocol    = -1
+      cidr_blocks = "0.0.0.0/0"
     }
   ]
 }
 
-module "monitoring_module" {
-  depends_on = [module.compute_module]
-  source     = "./modules/monitoring_module"
-
-  create_lambda_log_groups = [for lambda in module.compute_module.created_lambdas : lambda.function_name]
-}
-
-module "compute_module" {
-  depends_on = [
-    module.security_module,
-    module.storage_module,
-    module.network_module
+module "generation" {
+  source        = "./modules/lambda_module"
+  function_name = "generation"
+  timeout       = 6
+  policies = [
+    "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
   ]
-  source = "./modules/compute_module"
-
-  create_lambdas = [
-    {
-      function_name         = local.lambda_config.generation.function_name
-      handler               = local.lambda_config.generation.handler
-      runtime               = local.lambda_config.generation.runtime
-      timeout               = local.lambda_config.generation.timeout
-      role_arn              = module.security_module.lambda_execution_role.arn
-      s3_bucket_id          = module.storage_module.lambda-build-s3-bucket.id
-      s3_key                = local.lambda_config.generation.zip_file_name
-      source_code_hash      = data.archive_file.generation_lambda_zip.output_base64sha256
-      environment_variables = {}
-      vpc_config = {
-        subnet_ids         = [module.network_module.pokedex_subnet.id]
-        security_group_ids = [module.network_module.pokeapi_security_group.id]
-      }
-    }
-  ]
+  s3_bucket_id = aws_s3_bucket.lambda-build-s3-bucket.id
+  archive_file = {
+    type        = "zip"
+    source_file = "lambda_src/generation/bootstrap"
+    output_path = "generation-lambda.zip"
+  }
+  vpc_subnet_ids         = module.vpc.private_subnets
+  vpc_security_group_ids = [module.vpc.default_security_group_id]
 }
