@@ -13,12 +13,13 @@ Cloud infrastructure is created with Terraform together with Python helper scrip
 
 - compile_lambda.py
 - go_workspace_init.py
+- shared_vars.py
 - terraform_apply.py
 - terraform_destroy.py
 - terraform_format.py
 - terraform_init.py
 - terraform_plan.py
-- terraform_vars.py
+- terraform_validate.py
 - test_go.py
 
 pre-commit hooks for some automatic quality control

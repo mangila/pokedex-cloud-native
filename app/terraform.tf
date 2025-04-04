@@ -43,30 +43,74 @@ provider "aws" {
 #   ]
 # }
 
-module "fetch_generation" {
+module "s3_bucket_for_lambda_source_code" {
+  source        = "terraform-aws-modules/s3-bucket/aws"
+  bucket_prefix = "pokedex-lambda-build-bucket-"
+  force_destroy = true
+}
+
+module "enrich_pokemon" {
   source = "./modules/lambda_module"
 
-  function_name = "fetch-generation"
-  timeout       = 30
+  function_name = "enrich-pokemon"
+  timeout       = 10
   policies = [
     "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
     aws_iam_policy.sqs_send_msg_policy.arn
   ]
-  s3_bucket_id = aws_s3_bucket.lambda-build-s3-bucket.id
+  s3_bucket_id = module.s3_bucket_for_lambda_source_code.s3_bucket_id
+  archive_file = {
+    type        = "zip"
+    source_file = "lambda_src/enrich_pokemon/bootstrap"
+    output_path = "enrich-pokemon-lambda.zip"
+  }
+  environment_variables = {
+  }
+}
+
+module "fetch_generation" {
+  source = "./modules/lambda_module"
+
+  function_name = "fetch-generation"
+  timeout       = 10
+  policies = [
+    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    aws_iam_policy.sqs_send_msg_policy.arn
+  ]
+  s3_bucket_id = module.s3_bucket_for_lambda_source_code.s3_bucket_id
   archive_file = {
     type        = "zip"
     source_file = "lambda_src/fetch_generation/bootstrap"
     output_path = "fetch-generation-lambda.zip"
   }
   environment_variables = {
-    GENERATION_QUEUE_URL : module.generation_queue.queue_url
+    GENERATION_QUEUE_URL : module.pokemon_sqs.queue_url
   }
 }
 
-module "generation_queue" {
+module "persist_pokemon" {
+  source = "./modules/lambda_module"
+
+  function_name = "persist-pokemon"
+  timeout       = 10
+  policies = [
+    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    aws_iam_policy.sqs_send_msg_policy.arn
+  ]
+  s3_bucket_id = module.s3_bucket_for_lambda_source_code.s3_bucket_id
+  archive_file = {
+    type        = "zip"
+    source_file = "lambda_src/persist_pokemon/bootstrap"
+    output_path = "persist-pokemon-lambda.zip"
+  }
+  environment_variables = {
+  }
+}
+
+module "pokemon_sqs" {
   source = "terraform-aws-modules/sqs/aws"
 
-  name                       = "generation-queue"
+  name                       = "pokemon-q"
   visibility_timeout_seconds = 120
   delay_seconds              = 10
   receive_wait_time_seconds  = 20
@@ -77,7 +121,7 @@ module "generation_queue" {
   }
 
   create_dlq                     = true
-  dlq_name                       = "generation-dead-queue"
+  dlq_name                       = "pokemon-dlq"
   dlq_visibility_timeout_seconds = 120
   dlq_receive_wait_time_seconds  = 20
   dlq_message_retention_seconds  = 60 * 3600

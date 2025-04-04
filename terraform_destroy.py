@@ -1,6 +1,6 @@
 import subprocess
 
-from terraform_vars import ENV_TF_VARS_FILE, SECRET_TF_VARS_FILE
+from shared_vars import ENV_TF_VARS_FILE, SECRET_TF_VARS_FILE
 
 
 def terraform_destroy():

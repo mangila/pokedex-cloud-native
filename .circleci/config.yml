@@ -54,7 +54,9 @@ jobs:
           name: Persist Lambda binaries to CircleCI Workspace
           root: .
           paths:
-            - app/lambda_src/generation/bootstrap
+            - app/lambda_src/enrich_pokemon/bootstrap
+            - app/lambda_src/fetch_generation/bootstrap
+            - app/lambda_src/persist_pokemon/bootstrap
   terraform-plan:
     executor: deploy-executor
     steps:
@@ -78,7 +80,9 @@ jobs:
           name: Persist Lambda zip files to CircleCI Workspace
           root: .
           paths:
-            - app/generation-lambda.zip
+            - app/enrich-pokemon-lambda.zip
+            - app/fetch-generation-lambda.zip
+            - app/persist-pokemon-lambda.zip
       - persist_to_workspace:
           name: Persist 'pokedex-tfplan' to CircleCI Workspace
           root: .

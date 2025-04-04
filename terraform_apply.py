@@ -1,6 +1,6 @@
 import subprocess
 
-from terraform_vars import TF_PLAN_FILE
+from shared_vars import TF_PLAN_FILE
 
 
 def terraform_apply():

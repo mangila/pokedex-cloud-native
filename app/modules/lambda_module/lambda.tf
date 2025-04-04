@@ -5,7 +5,7 @@ data "archive_file" "this" {
 }
 
 resource "aws_iam_role" "this" {
-  name = "lambda_execution_role"
+  name = format("%s-lambda-iam-role", var.function_name)
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [

@@ -1,12 +1,11 @@
 import os
 import subprocess
 
+from shared_vars import LAMBDAS
+
 
 def main():
-    lambdas = [
-        {"name": "fetch_generation"},
-    ]
-    for lambda_info in lambdas:
+    for lambda_info in LAMBDAS:
         lambda_name = lambda_info["name"]
         print(lambda_name)
         build_go_binaries(lambda_name=lambda_name)

@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from terraform_vars import ENV_TF_VARS_FILE, SECRET_TF_VARS_FILE, TF_PLAN_FILE
+from shared_vars import ENV_TF_VARS_FILE, SECRET_TF_VARS_FILE, TF_PLAN_FILE
 
 
 def terraform_plan():

@@ -47,12 +47,12 @@ func Handler(event json.RawMessage) (Response, error) {
 	messagesSent := make([]string, 0)
 	delaySecondsMaxLimit := int64(900)
 	for index, species := range response.PokemonSpecies {
-		delay := int64(index * 3)
-		if delay >= delaySecondsMaxLimit {
-			delay = delaySecondsMaxLimit
+		delaySeconds := int64(index * 3)
+		if delaySeconds >= delaySecondsMaxLimit {
+			delaySeconds = delaySecondsMaxLimit
 		}
 		message, err := sqsClient.SendMessage(&sqs.SendMessageInput{
-			DelaySeconds: &delay,
+			DelaySeconds: &delaySeconds,
 			MessageAttributes: map[string]*sqs.MessageAttributeValue{
 				"Name": {
 					DataType:    aws.String("String"),
