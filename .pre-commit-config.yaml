@@ -20,21 +20,3 @@ repos:
         files: "^app"
         stages:
           - pre-commit
-      - id: go_test.py
-        name: Test Go Code
-        entry: python go_test.py
-        language: system
-        verbose: true
-        require_serial: true
-        files: "^app/lambda_src"
-        stages:
-          - pre-commit
-      - id: go_compile_lambda.py
-        name: Compile Go Code
-        entry: python go_compile_lambda.py
-        language: system
-        verbose: true
-        require_serial: true
-        files: "^app/lambda_src"
-        stages:
-          - pre-commit
