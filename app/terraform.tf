@@ -5,124 +5,81 @@ terraform {
       name = "pokedex-cloud-native-workspace"
     }
   }
-}
-
-provider "aws" {
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
-  region     = var.aws_region
-
-  default_tags {
-    tags = {
-      Application = "pokedex-cloud-native"
-      Environment = var.application_environment
-      Owner       = "mangila"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.81.0"
+    }
+    local = {
+      source  = "hashicorp/local"
+      version = "2.5.2"
     }
   }
 }
 
-# module "vpc" {
-#   source = "terraform-aws-modules/vpc/aws"
+locals {
+  app_name = "pokedex-cloud-native"
+}
+
+provider "aws" {
+  profile = "terraform"
+  region  = "eu-north-1"
+}
+
+resource "aws_servicecatalogappregistry_application" "application_registry" {
+  name = local.app_name
+}
+
+# resource "aws_cloudwatch_event_connection" "step-function-connection" {
+#   name               = "step-function-connection"
+#   description        = "A connection description"
+#   authorization_type = "BASIC"
 #
-#   name                                                      = "pokedex_vpc"
-#   default_vpc_enable_dns_hostnames                          = true
-#   default_vpc_enable_dns_support                            = true
-#   cidr                                                      = "10.0.0.0/16"
-#   azs                                                       = var.aws_azs
-#   private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-#   public_subnets = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
-#   public_subnet_enable_resource_name_dns_a_record_on_launch = true
-#   enable_nat_gateway                                        = true
-#   single_nat_gateway                                        = true
-#   nat_gateway_destination_cidr_block                        = "0.0.0.0/0"
-#   default_security_group_egress = [
-#     {
-#       protocol    = -1
-#       cidr_blocks = "0.0.0.0/0"
+#   auth_parameters {
+#     basic {
+#       username = "user"
+#       password = "password"
 #     }
-#   ]
+#   }
 # }
 
-module "s3_bucket_for_lambda_source_code" {
-  source        = "terraform-aws-modules/s3-bucket/aws"
-  bucket_prefix = "pokedex-lambda-build-bucket-"
-  force_destroy = true
+resource "local_file" "step_function_1" {
+  filename = "step_function_asl.json"
+  content = jsonencode({
+    Comment = "hello world"
+    StartAt = "Hello"
+    States = {
+      Hello = {
+        Type   = "Pass"
+        Result = "Hello"
+        Next   = "World"
+      }
+      World = {
+        Type   = "Pass"
+        Result = "World"
+        End    = true
+      }
+    }
+  })
 }
 
-module "enrich_pokemon" {
-  source = "./modules/lambda_module"
-
-  function_name = "enrich-pokemon"
-  timeout       = 10
-  policies = [
-    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-    aws_iam_policy.sqs_send_msg_policy.arn
-  ]
-  s3_bucket_id = module.s3_bucket_for_lambda_source_code.s3_bucket_id
-  archive_file = {
-    type        = "zip"
-    source_file = "lambda_src/enrich_pokemon/bootstrap"
-    output_path = "enrich-pokemon-lambda.zip"
+module "step" {
+  source                                 = "terraform-aws-modules/step-functions/aws"
+  name                                   = "step1"
+  cloudwatch_log_group_name              = "stepfunction/step1"
+  cloudwatch_log_group_retention_in_days = 7
+  type                                   = "express"
+  logging_configuration = {
+    include_execution_data = true
+    level                  = "INFO"
   }
-  environment_variables = {
+  service_integrations = {
+    xray = {
+      xray = true
+    }
   }
-}
-
-module "fetch_generation" {
-  source = "./modules/lambda_module"
-
-  function_name = "fetch-generation"
-  timeout       = 10
-  policies = [
-    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-    aws_iam_policy.sqs_send_msg_policy.arn
-  ]
-  s3_bucket_id = module.s3_bucket_for_lambda_source_code.s3_bucket_id
-  archive_file = {
-    type        = "zip"
-    source_file = "lambda_src/fetch_generation/bootstrap"
-    output_path = "fetch-generation-lambda.zip"
-  }
-  environment_variables = {
-    GENERATION_QUEUE_URL : module.pokemon_sqs.queue_url
-  }
-}
-
-module "persist_pokemon" {
-  source = "./modules/lambda_module"
-
-  function_name = "persist-pokemon"
-  timeout       = 10
-  policies = [
-    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-    aws_iam_policy.sqs_send_msg_policy.arn
-  ]
-  s3_bucket_id = module.s3_bucket_for_lambda_source_code.s3_bucket_id
-  archive_file = {
-    type        = "zip"
-    source_file = "lambda_src/persist_pokemon/bootstrap"
-    output_path = "persist-pokemon-lambda.zip"
-  }
-  environment_variables = {
-  }
-}
-
-module "pokemon_sqs" {
-  source = "terraform-aws-modules/sqs/aws"
-
-  name                       = "pokemon-q"
-  visibility_timeout_seconds = 120
-  delay_seconds              = 10
-  receive_wait_time_seconds  = 20
-  message_retention_seconds  = 60 * 3600
-
-  redrive_policy = {
-    maxReceiveCount = 3
-  }
-
-  create_dlq                     = true
-  dlq_name                       = "pokemon-dlq"
-  dlq_visibility_timeout_seconds = 120
-  dlq_receive_wait_time_seconds  = 20
-  dlq_message_retention_seconds  = 60 * 3600
+  definition                = local_file.step_function_1.content
+  cloudwatch_log_group_tags = aws_servicecatalogappregistry_application.application_registry.application_tag
+  role_tags                 = aws_servicecatalogappregistry_application.application_registry.application_tag
+  tags                      = aws_servicecatalogappregistry_application.application_registry.application_tag
 }

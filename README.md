@@ -11,9 +11,6 @@ Consume pokeapi.co as a Cloud Native app.
 
 Cloud infrastructure is created with Terraform together with Python helper scripts.
 
-- go_compile_lambda.py
-- go_test.py
-- go_workspace_init.py
 - shared_vars.py
 - terraform_apply.py
 - terraform_destroy.py
@@ -26,4 +23,4 @@ pre-commit hooks for some automatic quality control
 
 - [pre-commit](https://pre-commit.com/) hooks see `.pre-commit-config.yaml`
 
-CircleCI for some CI deployment and Terraform state management as a Terraform workspace
+Terraform state management as a Terraform workspace

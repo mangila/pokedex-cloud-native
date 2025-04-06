@@ -1,12 +1,12 @@
 import os
 import subprocess
 
-from shared_vars import ENV_TF_VARS_FILE, SECRET_TF_VARS_FILE, TF_PLAN_FILE
+from shared_vars import SECRET_TF_VARS_FILE, TF_PLAN_FILE
 
 
 def terraform_plan():
     os.chdir("app")
-    tf_command = f"terraform plan -var-file={ENV_TF_VARS_FILE} -out={TF_PLAN_FILE}"
+    tf_command = f"terraform plan -out={TF_PLAN_FILE}"
     if os.path.exists(SECRET_TF_VARS_FILE):
         print(f"Including {SECRET_TF_VARS_FILE} in the command.")
         tf_command += f" -var-file={SECRET_TF_VARS_FILE}"
