@@ -19,26 +19,6 @@ resource "aws_cloudwatch_event_connection" "step-function-connection" {
   }
 }
 
-resource "local_file" "step_function_1" {
-  filename = "step_function_asl.json"
-  content = jsonencode({
-    Comment = "hello world"
-    StartAt = "Hello"
-    States = {
-      Hello = {
-        Type   = "Pass"
-        Result = "Hello"
-        Next   = "World"
-      }
-      World = {
-        Type   = "Pass"
-        Result = "World"
-        End    = true
-      }
-    }
-  })
-}
-
 module "step" {
   source                                 = "terraform-aws-modules/step-functions/aws"
   name                                   = "step1"
@@ -54,7 +34,7 @@ module "step" {
       xray = true
     }
   }
-  definition                = local_file.step_function_1.content
+  definition                = templatefile("${path.module}/templates/state_machine.json", {})
   cloudwatch_log_group_tags = aws_servicecatalogappregistry_application.application_registry.application_tag
   role_tags                 = aws_servicecatalogappregistry_application.application_registry.application_tag
   tags                      = aws_servicecatalogappregistry_application.application_registry.application_tag
