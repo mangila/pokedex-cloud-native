@@ -1,6 +1,7 @@
 .idea
 *.zip
 *.bin
+*.tfplan
 bootstrap
 __pycache__
 terraform.secret.tfvars.tf
