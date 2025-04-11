@@ -13,7 +13,10 @@ resource "aws_iam_policy" "step-function-pokeapi" {
             "states:HTTPMethod" : "GET"
           },
           "StringLike" : {
-            "states:HTTPEndpoint" : "https://pokeapi.co/api/v2/**"
+            "states:HTTPEndpoint" : [
+              "https://pokeapi.co/api/v2/**",
+              "https://raw.githubusercontent.com/PokeAPI/**"
+            ]
           }
         }
       },
