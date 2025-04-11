@@ -9,7 +9,7 @@
       "Choices": [
         {
           "Next": "GET - Pokemon Species By Name",
-          "Condition": "{% $contains($states.input.name, /^[A-Za-z0-9-]+$/i) %}"
+          "Condition": "{% $contains($states.input.name, /^[A-Za-z0-9-]+$/) %}"
         }
       ],
       "Default": "Fail"
@@ -90,8 +90,7 @@
     },
     "Fail": {
       "Type": "Fail",
-      "Error": "Failed to Validate Pokemon Species name",
-      "Cause": "Create a Pokemon Name!"
+      "Error": "Validation Error - Pokemon Species name"
     }
   }
 }
