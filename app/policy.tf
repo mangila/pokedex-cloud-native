@@ -1,12 +1,21 @@
-resource "aws_iam_policy" "step-function-http-invoke" {
-  name = "step-function-http-invoke"
+resource "aws_iam_policy" "step-function-pokeapi" {
+  name        = "step-function-pokeapi"
+  description = "IAM policy for a Step Function to invoke PokeAPI HTTP requests"
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
         "Effect" : "Allow",
         "Action" : "states:InvokeHTTPEndpoint",
-        "Resource" : "*"
+        "Resource" : "*",
+        "Condition" : {
+          "StringEquals" : {
+            "states:HTTPMethod" : "GET"
+          },
+          "StringLike" : {
+            "states:HTTPEndpoint" : "https://pokeapi.co/api/v2/**"
+          }
+        }
       },
       {
         "Effect" : "Allow",

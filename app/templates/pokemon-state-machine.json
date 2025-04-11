@@ -1,0 +1,97 @@
+{
+  "Comment": "Step function to fetch and transform pokemon",
+  "StartAt": "Validate Pokemon Species Name",
+  "TimeoutSeconds": 500,
+  "QueryLanguage": "JSONata",
+  "States": {
+    "Validate Pokemon Species Name": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Next": "GET - Pokemon Species By Name",
+          "Condition": "{% $contains($states.input.name, /^[A-Za-z0-9-]+$/i) %}"
+        }
+      ],
+      "Default": "Fail"
+    },
+    "GET - Pokemon Species By Name": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::http:invoke",
+      "Arguments": {
+        "Method": "GET",
+        "ApiEndpoint": "{% 'https://pokeapi.co/api/v2/pokemon-species/' & $states.input.name %}",
+        "InvocationConfig": {
+          "ConnectionArn": "${ConnectionArn}"
+        }
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 1,
+          "MaxAttempts": 3,
+          "JitterStrategy": "FULL"
+        }
+      ],
+      "Output": "{% $states.result %}",
+      "Assign": {
+        "response": "{% $states.result.ResponseBody %}"
+      },
+      "Next": "Parallel - Glue Pokemon Together"
+    },
+    "Parallel - Glue Pokemon Together": {
+      "Type": "Parallel",
+      "Branches": [
+        {
+          "StartAt": "GET - Evolution Chain",
+          "States": {
+            "GET - Evolution Chain": {
+              "Type": "Pass",
+              "End": true,
+              "Output": "{% $states.input.ResponseBody.evolution_chain %}"
+            }
+          }
+        },
+        {
+          "StartAt": "Map - Pokemon Varieties",
+          "States": {
+            "Map - Pokemon Varieties": {
+              "Type": "Map",
+              "Items": "{% $states.input.ResponseBody.varieties %}",
+              "ItemProcessor": {
+                "ProcessorConfig": {
+                  "Mode": "INLINE"
+                },
+                "StartAt": "GET - Pokemon Varieties",
+                "States": {
+                  "GET - Pokemon Varieties": {
+                    "Type": "Pass",
+                    "End": true,
+                    "Output": "{% $states.input %}"
+                  }
+                }
+              },
+              "End": true
+            }
+          }
+        }
+      ],
+      "Next": "Pass"
+    },
+    "Pass": {
+      "Type": "Pass",
+      "End": true,
+      "Output": {
+        "result": "{% $states.input %}",
+        "pokemon-species": "{% $response %}"
+      }
+    },
+    "Fail": {
+      "Type": "Fail",
+      "Error": "Failed to Validate Pokemon Species name",
+      "Cause": "Create a Pokemon Name!"
+    }
+  }
+}
