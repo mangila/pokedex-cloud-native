@@ -21,7 +21,7 @@
         "Method": "GET",
         "ApiEndpoint": "{% 'https://pokeapi.co/api/v2/pokemon-species/' & $states.input.name %}",
         "InvocationConfig": {
-          "ConnectionArn": "${ConnectionArn}"
+          "ConnectionArn": "arn:aws:events:eu-north-1:606960016612:connection/step-function-connection/ee00e5c8-0702-491c-bee4-a26eaa9cc093"
         }
       },
       "Retry": [
@@ -48,9 +48,27 @@
           "StartAt": "GET - Evolution Chain",
           "States": {
             "GET - Evolution Chain": {
-              "Type": "Pass",
-              "End": true,
-              "Output": "{% $states.input.ResponseBody.evolution_chain %}"
+              "Type": "Task",
+              "Resource": "arn:aws:states:::http:invoke",
+              "Arguments": {
+                "Method": "GET",
+                "ApiEndpoint": "{% $states.input.ResponseBody.evolution_chain.url %}",
+                "InvocationConfig": {
+                  "ConnectionArn": "arn:aws:events:eu-north-1:606960016612:connection/step-function-connection/ee00e5c8-0702-491c-bee4-a26eaa9cc093"
+                }
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "States.ALL"
+                  ],
+                  "BackoffRate": 2,
+                  "IntervalSeconds": 1,
+                  "MaxAttempts": 3,
+                  "JitterStrategy": "FULL"
+                }
+              ],
+              "End": true
             }
           }
         },
