@@ -21,7 +21,7 @@
         "Method": "GET",
         "ApiEndpoint": "{% 'https://pokeapi.co/api/v2/pokemon-species/' & $states.input.name %}",
         "InvocationConfig": {
-          "ConnectionArn": "arn:aws:events:eu-north-1:606960016612:connection/step-function-connection/ee00e5c8-0702-491c-bee4-a26eaa9cc093"
+          "ConnectionArn": "${ConnectionArn}"
         }
       },
       "Retry": [
@@ -54,7 +54,7 @@
                 "Method": "GET",
                 "ApiEndpoint": "{% $states.input.ResponseBody.evolution_chain.url %}",
                 "InvocationConfig": {
-                  "ConnectionArn": "arn:aws:events:eu-north-1:606960016612:connection/step-function-connection/ee00e5c8-0702-491c-bee4-a26eaa9cc093"
+                  "ConnectionArn": "${ConnectionArn}"
                 }
               },
               "Retry": [
