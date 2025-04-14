@@ -19,7 +19,6 @@ module "pokemon-state-machine" {
   source  = "terraform-aws-modules/step-functions/aws"
   version = "4.2.1"
   name    = "pokemon-state-machine"
-  type    = "express"
   definition = templatefile("templates/pokemon-state-machine.json", {
     ConnectionArn : aws_cloudwatch_event_connection.step-function-connection.arn
   })
@@ -39,6 +38,29 @@ module "pokemon-state-machine" {
       xray = true
     }
   }
+
+  tags = aws_servicecatalogappregistry_application.application_registry.application_tag
+}
+
+module "lambda_function" {
+  source  = "terraform-aws-modules/lambda/aws"
+  version = "7.20.2"
+
+  function_name = "asdf"
+  description   = "My awesome lambda function"
+  handler       = "bootstrap"
+  runtime       = "provided.al2023"
+
+  attach_policies = true
+  policies = [
+
+  ]
+  role_tags = aws_servicecatalogappregistry_application.application_registry.application_tag
+
+  source_path = "./lambda/fetch-pokemon-variety"
+
+  cloudwatch_logs_retention_in_days = 7
+  cloudwatch_logs_tags              = aws_servicecatalogappregistry_application.application_registry.application_tag
 
   tags = aws_servicecatalogappregistry_application.application_registry.application_tag
 }

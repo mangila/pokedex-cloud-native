@@ -34,6 +34,16 @@ resource "aws_iam_policy" "step-function-pokeapi" {
           "secretsmanager:DescribeSecret"
         ],
         "Resource" : "arn:aws:secretsmanager:*:*:secret:events!connection/*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "states:StartExecution",
+          "states:DescribeExecution",
+          "states:StopExecution",
+          "states:GetExecutionHistory"
+        ]
+        "Resource" : "*"
       }
     ]
   })

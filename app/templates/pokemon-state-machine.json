@@ -35,9 +35,12 @@
           "JitterStrategy": "FULL"
         }
       ],
-      "Output": "{% $states.result %}",
+      "Output": {
+        "evolution_chain_url": "{% $states.result.ResponseBody.evolution_chain.url %}",
+        "varieties_url": "{% $states.result.ResponseBody.varieties.pokemon.url %}"
+      },
       "Assign": {
-        "response": "{% $states.result.ResponseBody %}"
+        "name": "{% $states.result.ResponseBody.name %}"
       },
       "Next": "Parallel - Glue Pokemon Together"
     },
@@ -52,9 +55,9 @@
               "Resource": "arn:aws:states:::http:invoke",
               "Arguments": {
                 "Method": "GET",
-                "ApiEndpoint": "{% $states.input.ResponseBody.evolution_chain.url %}",
+                "ApiEndpoint": "{% $states.input.evolution_chain_url %}",
                 "InvocationConfig": {
-                  "ConnectionArn": "${ConnectionArn}"
+                 "ConnectionArn": "${ConnectionArn}"
                 }
               },
               "Retry": [
@@ -68,7 +71,9 @@
                   "JitterStrategy": "FULL"
                 }
               ],
-              "Output": "{% $states.result.ResponseBody %}",
+              "Output": {
+                "evolution_chain": "{% $states.result.ResponseBody %}"
+              },
               "End": true
             }
           }
@@ -78,21 +83,48 @@
           "States": {
             "Map - Pokemon Varieties": {
               "Type": "Map",
-              "Items": "{% $states.input.ResponseBody.varieties %}",
+              "Items": "{% $states.input.varieties_url %}",
               "ItemProcessor": {
                 "ProcessorConfig": {
-                  "Mode": "INLINE"
+                  "Mode": "DISTRIBUTED",
+                  "ExecutionType": "EXPRESS"
                 },
-                "StartAt": "GET - Pokemon Varieties",
+                "StartAt": "GET - Pokemon Vareity",
                 "States": {
-                  "GET - Pokemon Varieties": {
-                    "Type": "Pass",
-                    "End": true,
-                    "Output": "{% $states.input %}"
+                  "GET - Pokemon Vareity": {
+                    "Type": "Task",
+                    "Resource": "arn:aws:states:::http:invoke",
+                    "Arguments": {
+                      "Method": "GET",
+                       "ApiEndpoint": "{% $states.input %}",
+                      "InvocationConfig": {
+                        "ConnectionArn": "${ConnectionArn}"
+                      }
+                    },
+                    "Retry": [
+                      {
+                        "ErrorEquals": [
+                          "States.ALL"
+                        ],
+                        "BackoffRate": 2,
+                        "IntervalSeconds": 1,
+                        "MaxAttempts": 3,
+                        "JitterStrategy": "FULL"
+                      }
+                    ],
+                    "End": true
                   }
                 }
               },
-              "End": true
+              "End": true,
+              "Label": "Map-PokemonVarieties",
+              "MaxConcurrency": 1000,
+              "ResultWriter": {
+                "WriterConfig": {
+                  "OutputType": "JSON",
+                  "Transformation": "COMPACT"
+                }
+              }
             }
           }
         }
@@ -103,8 +135,9 @@
       "Type": "Pass",
       "End": true,
       "Output": {
-        "result": "{% $states.input %}",
-        "pokemon-species": "{% $response %}"
+        "evolution_chain": "{% $states.input.evolution_chain %}",
+        "varieties": "{% $states.input.variety %}",
+        "name": "{% $name %}"
       }
     },
     "Fail": {

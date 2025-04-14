@@ -4,13 +4,13 @@ variable "aws_region" {
 }
 
 variable "eventbridge_connection_user" {
-  description = "Eventbridge connection username"
+  description = "EventBridge connection username"
   type        = string
   sensitive   = true
 }
 
 variable "eventbridge_connection_password" {
-  description = "Eventbridge connection password"
+  description = "EventBridge connection password"
   type        = string
   sensitive   = true
 }
